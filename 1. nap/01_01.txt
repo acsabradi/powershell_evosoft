@@ -1,0 +1,69 @@
+﻿#=============================================
+#---- Alapelemek ----
+#=============================================
+Get-Command	
+Get-Command Get*
+Get-Command *-Service
+Get-Command -Verb Get
+Get-Command -Noun Service
+Get-Command -Verb Get -Noun Service
+Get-Command -Name Get-Service
+Get-Command Get-Service
+Get-Command -Module Microsoft.PowerShell.Management
+Get-Command Microsoft.PowerShell.Management
+Get-Command Get-Service -ShowCommandInfo
+GetMac.exe
+dir
+dir /s 
+help
+help dir
+man dir
+help help
+Get-Help
+chdir ..\..
+Get-Help -Name chdir
+Get-Help -Name chdir -Detailed
+Get-Help -Name chdir -Example
+Get-Help -Name chdir -Full
+Get-Help -Name chdir -Online
+Get-Help -Name chdir -ShowWindow
+Get-Help -Name chdir -Full | Out-File C:\PowerShell\chdir.txt
+Get-Help -Name chdir -Parameter Path
+Get-Help -Name Update-Help
+Get-Help -Name Save-Help
+dir
+Push-Location
+Set-Location -Path C:\Windows
+dir
+Pop-Location
+dir
+Set-Location -Path C:\Powershell\Democode
+dir
+Get-Help -Name about_*
+Get-Help -Name about_Aliases
+Get-ChildItem
+(Get-ChildItem).GetType()
+Get-ChildItem | Get-Member
+Get-Member -InputObject (Get-ChildItem)
+dir C:\Windows\System32\*.log /s
+Get-ChildItem -Path C:\Windows\System32 -Include *.log -Recurse
+Get-ChildItem -Path C:\Windows\System32 -Include *.log -Recurse | Get-Member
+Get-ChildItem -Path C:\Windows\System32 -Include *.log -Recurse | Format-List
+Get-ChildItem -Path C:\Windows\System32 -Include *.log -Recurse | Format-List -Property FullName, CreationTime, LastWriteTime, LastAccessTime
+Get-ChildItem -Path C:\Windows\System32 -Include *.log -Recurse | Format-Table -Property FullName, CreationTime, LastWriteTime, LastAccessTime
+Get-ChildItem -Path C:\Windows\System32 -Include *.log -Recurse | Format-List -Property *
+Show-Command -Name Get-ChildItem -PassThru
+Get-ChildItem -Path C:\Windows\System32 -Include *.log -Recurse | Out-GridView
+Get-ChildItem -Path C:\Windows\System32 -Include *.log -Recurse | Out-GridView -PassThru
+"Hello world!"; 1+2
+Get-History
+Get-History | Export-Clixml -Path C:\PowerShell\Commands.xml
+Clear-History
+Get-History
+Add-History -InputObject (Import-Clixml -Path C:\PowerShell\Commands.xml)
+Get-History
+(Get-PSReadlineOption).HistorySavePath
+Get-Content -Path (Get-PSReadlineOption).HistorySavePath
+Get-ExecutionPolicy -List
+Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted
+Get-ExecutionPolicy -List

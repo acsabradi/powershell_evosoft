@@ -1,0 +1,37 @@
+﻿#=============================================
+#---- POWERSHELL 4 ÚJDONSÁGOK ----
+#=============================================
+# ---- Foreach és Where tagjellemzők
+$files = Get-ChildItem
+$files
+$files.ForEach{$_.Name, $_.Length}
+$files.Where{$_.Name -like "S*"}
+$comm1={$files.ForEach{$_.Name, $_.Length}}
+$comm2={$files.Where{$_.Name -like "M*"}}
+Measure-Command -Expression $comm1
+Measure-Command -Expression {$file | ForEach-Object {$_.Name, $_.Length}}
+Measure-Command -Expression $comm2
+Measure-Command -Expression {$file | Where-Object {$_.Name -like "M*"}}
+#--- Help szerkezetének újdonságai
+# Save-Help -DestinationPath C:\PowerShell\Help
+# Update-Help -SourcePath C:\PowerShell\Help -Module ActiveDirectory -Force
+#---- Get-Process újdonságai
+Get-Process
+Get-Process -Name PowerShell
+Get-Process -Name PowerShell -IncludeUserName
+Get-WmiObject -Class Win32_Process
+Get-WmiObject -Class Win32_Process -Filter 'Name="PowerShell.exe"'
+(Get-WmiObject -Class Win32_Process -Filter 'Name="PowerShell.exe"').GetOwner()
+#---- Desired State Configuration
+Get-Command -Module PSDesiredStateConfiguration
+Get-Content -Path .\Dsc.txt
+Get-DscResource 
+Get-DscResource -Name Registry | Select-Object -ExpandProperty Properties
+Get-DscResource -Name Registry -Syntax
+Get-Content -Path .\Dsc.ps1 
+# . .\Dsc.ps1 
+# RegConfiguration -OutputPath C:\PowerShell 
+# Start-DscConfiguration -Path C:\PowerShell -Wait -Verbose -Force
+# Test-DscConfiguration -Detailed
+# Get-DscConfigurationStatus
+# Get-DscLocalConfigurationManager

@@ -1,0 +1,111 @@
+﻿#=============================================
+#---- WMI használat ----
+#============================================= 
+Get-WmiObject -NameSpace "root/CIMV2" -List
+Get-WmiObject -Class Win32_NetworkAdapter
+Get-WmiObject -Query 'SELECT * FROM Win32_Product WHERE Vendor="Microsoft Corporation"'
+Get-WmiObject -Class Win32_Product -Filter 'Vendor="Microsoft Corporation"'
+(Get-WmiObject -Class Win32_Product -Filter 'Vendor="Microsoft Corporation"').GetType()
+(Get-WmiObject -Class Win32_Product -Filter 'Vendor="Microsoft Corporation"')[0].GetType()
+(Get-WmiObject -Class Win32_Product -Filter 'Vendor="Microsoft Corporation"')[0] | Get-Member
+Get-WmiObject -Class Win32_Product -Filter 'Vendor="Microsoft Corporation"' | Format-List -Property Name
+Get-WmiObject -Class Win32_Service -Credential DOMAIN\Administrator -Computer MasikGep
+Get-WmiObject -Class Win32_Share
+Get-WmiObject -Class Win32_Share | Get-Member
+$share = [wmiclass] "Win32_Share"
+$share | Get-Member
+$share.Create("C:\PowerShell","Temp",0)
+Get-WmiObject -Class Win32_Share
+[wmi]"\\$($env:ComputerName)\root\cimv2:Win32_Share.Name='Temp'"
+(Get-WmiObject -Class Win32_Share -Filter 'Name="Temp"').Delete()
+Get-WmiObject -Class Win32_Share
+# WMIExplorer indítása
+# Root\CIMv2\Win32_Share Instances vizsgálata
+Get-WmiObject -Class "Win32_ComputerSystem" -NameSpace "root\CIMV2"
+(Get-WmiObject -Class "Win32_ComputerSystem" -Namespace "root\CIMV2").Name
+Get-WmiObject -Class "Win32_BIOS" -NameSpace "root\CIMV2"
+(Get-WmiObject -Class "Win32_BIOS" -NameSpace "root\CIMV2").Manufacturer
+Get-WmiObject -Class "Win32_Processor" -NameSpace "root\CIMV2"
+(Get-WmiObject -Class "Win32_Processor" -NameSpace "root\CIMV2").Name
+$c = Get-WmiObject -Class "Win32_LogicalDisk" -NameSpace "root\CIMV2" -Filter 'Caption="C:"'
+$c
+$c.FreeSpace/1mb
+#=============================================
+#---- CIM vs. WMI ----
+#=============================================
+#---- WinRM bekapcsolása ----
+#Enable-PSRemoting –SkipNetworkProfileCheck -Force
+Get-WMIObject –Namespace root –List -Recurse | Select-Object -Unique __NAMESPACE
+Get-WmiObject -Namespace root\cimv2 –List | Sort-Object -Property Name
+Get-CimClass –Namespace root\CIMv2 | Sort-Object -Property CimClassName
+Get-Command -Module CimCmdlets | Sort-Object -Property Noun
+Get-WmiObject –ClassName Win32_Service | Get-Member
+Get-CimInstance –ClassName Win32_Service | Get-Member
+Get-WmiObject -Class Win32_Service | Get-Member | Where-Object Name -eq 'Change' | Format-List -Property Name,Definition
+Get-CimInstance -Class Win32_Service | Get-Member | Where-Object Name -eq 'Change' | Format-List -Property Name,Definition
+Get-CimClass –Class Win32_Service
+(Get-CimClass –Class Win32_Service).CimClassMethods
+(Get-CimClass –Class Win32_Service).CimClassMethods | Where-Object {$_.Name -eq "Change"}
+((Get-CimClass –Class Win32_Service).CimClassMethods | Where-Object {$_.Name -eq "Change"}).Parameters
+$c = Get-WmiObject –Class Win32_LogicalDisk –Filter "DriveType=3“
+$c
+$c = Get-CimInstance –ClassName Win32_LogicalDisk –Filter "DriveType=3"
+$c
+$c = Get-WmiObject –Query "SELECT * FROM Win32_LogicalDisk WHERE DriveType = 3"
+$c
+$c = Get-CimInstance –Query "SELECT * FROM Win32_LogicalDisk WHERE DriveType = 3"
+$c
+$s = New-CimSession –ComputerName localhost
+Get-WmiObject -Class Win32_OperatingSystem -Computer localhost
+Get-CimInstance –CimSession $s –ClassName Win32_OperatingSystem
+$s | Remove-CimSession
+Start-Process -FilePath notepad
+Get-WmiObject –Class Win32_Process –Filter "Name='notepad.exe'" | Invoke-WmiMethod –Name Terminate
+Start-Process -FilePath notepad
+Invoke-CimMethod -Query 'SELECT * FROM Win32_Process WHERE name LIKE "notepad%"' -MethodName "Terminate"
+#=============================================
+#---- Job kezelés ----
+#=============================================
+Start-Job –ScriptBlock { Dir C:\ -Recurse } –Name LocalDir
+Start-Job –ScriptBlock { Get-EventLog –LogName Security –Newest 100 } -Name SecLogs
+Get-Job
+Get-Job –Name LocalDir | Stop-Job
+Receive-Job –Name LocalDir -Keep | Select-Object -First 100
+Get-Job
+Receive-Job –Name LocalDir | Select-Object -First 100
+Get-Job
+Remove-Job –Name LocalDir
+Wait-Job -Name SecLogs
+Get-Job 
+Get-Job –Name SecLogs | Select-Object –ExpandProperty ChildJobs | Where-Object location -eq 'localhost' | Select-Object -ExpandProperty ID 
+$id = Get-Job –Name SecLogs | Select-Object –ExpandProperty ChildJobs | Where-Object location -eq 'localhost' | Select-Object -ExpandProperty ID 
+Get-Job –ID $id | Receive-Job
+Remove-Job –Name SecLogs
+Import-Module -Name PSScheduledJob
+Get-ScheduledJob
+$trigger = New-JobTrigger –Once –At (Get-Date).AddMinutes(2)
+Register-ScheduledJob –Trigger $trigger –Name DemoJob –ScriptBlock { Get-EventLog –LogName Application –Newest 100 }
+Get-ScheduledJob | Select –Expand JobTriggers 
+Get-ScheduledJob 
+Get-Job
+Receive-Job –Name DemoJob
+Get-Job –Name DemoJob | Remove-Job
+Unregister-ScheduledJob -Name DemoJob
+#=============================================
+#---- Távoli futtatás ----
+#=============================================
+New-PSSession -ComputerName localhost -Name Local
+Get-PSSession -Name Local | Format-List
+Invoke-Command -Session (Get-PSSession -Name Local) -ScriptBlock {Get-Service G*}
+Invoke-Command -Session (Get-PSSession -Name Local) -ScriptBlock {Get-Service G*} -AsJob -JobName GServices
+Invoke-Command –ScriptBlock { Get-EventLog –LogName Security –Newest 100 } –ComputerName localhost -AsJob –JobName RemoteLogs
+Receive-Job -Name GServices
+Remove-PSSession -Name Local
+$dir = "C:\Windows"
+Get-ChildItem -Path $dir
+Invoke-Command -ComputerName localhost -ScriptBlock {Get-ChildItem -Path $dir}
+Invoke-Command -ComputerName localhost -ScriptBlock {Get-ChildItem -Path $input} -InputObject $dir
+#=============================================
+#---- Send Mail ----
+#=============================================
+Get-Content .\SendMail.txt

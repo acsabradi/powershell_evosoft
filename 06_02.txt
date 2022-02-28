@@ -1,0 +1,12 @@
+﻿#=============================================
+#---- Hibakezelés a TRAP használatával ----
+#=============================================
+# A Trap.ps1 szkript beolvasása.
+Get-Content -Path .\Trap.ps1
+# A Trap.ps1. szkript futtatása.
+.\Trap.ps1
+# Kommentek eltávolítása.
+.\Trap.ps1
+.\Trap.ps1
+# Trapparaméter beállítása.
+.\Trap.ps1

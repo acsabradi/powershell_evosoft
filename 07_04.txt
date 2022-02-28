@@ -1,0 +1,49 @@
+﻿#=============================================
+#---- POWERSHELL 7 ÚJDONSÁGOK ----
+#=============================================
+# Többplatformos változók
+Get-Variable -Name Is*
+# Háromtagú feltétel-operátor
+5 -gt 4 ? "Nagyobb" : "Nem nagyobb"
+5 -gt 6 ? "Nagyobb" : "Nem nagyobb"
+# Parancsok feltételes összefűzése
+Get-Item -Path C:\Windows\System32\notepad.exe
+Get-Item -Path C:\Windows\System32\nincsilyen.exe
+Get-Item -Path C:\Windows\System32\notepad.exe && Write-Host "Van ilyen fájl!"
+Get-Item -Path C:\Windows\System32\nincsilyen.exe && Write-Host "Van ilyen fájl!"
+Get-Item -Path C:\Windows\System32\notepad.exe || Write-Host "Nincs ilyen fájl!"
+Get-Item -Path C:\Windows\System32\nincsilyen.exe || Write-Host "Nincs ilyen fájl!"
+# ISNULL
+$a = $null
+$a ?? 123
+$a = 5
+$a ?? 123
+# Értékadás ISNULL-ra
+$a = $null
+$a ??= 123
+$a
+$a = 5
+$a ??= 123
+$a
+# Parallel Foreach-Object
+1..10 | ForEach-Object {Start-Sleep $_; Write-Host $_}
+1..10 | ForEach-Object -Parallel {Start-Sleep $_; Write-Host $_}
+(Measure-Command {1..10 | ForEach-Object {Start-Sleep $_; Write-Host $_}}).Seconds
+(Measure-Command {1..10 | ForEach-Object -Parallel {Start-Sleep $_; Write-Host $_}}).Seconds
+(Measure-Command {1..10 | ForEach-Object -Parallel {Start-Sleep $_; Write-Host $_} -ThrottleLimit 10}).Seconds
+(Measure-Command {1..10 | ForEach-Object -Parallel {Start-Sleep $_; Write-Host $_} -ThrottleLimit 5}).Seconds
+$a=10
+1..10 | ForEach-Object -Parallel {Start-Sleep $_; $_+$a} -ThrottleLimit 10 -TimeoutSeconds 5
+# Foreach-Object mint Job
+1..10 | ForEach-Object -Parallel {Start-Sleep $_; Write-Host $_} -AsJob
+Get-Job
+Get-Job -IncludeChildJob
+Receive-Job 2 -Keep
+Receive-Job 1 -Keep
+Receive-Job 1
+Get-Job -IncludeChildJob
+Get-Job | Remove-Job
+#=============================================
+#---- PowerShell7 Linuxon ----
+#=============================================
+Get-Content -Path C:\PowerShell\DemoCode\Linux.ps1

@@ -1,0 +1,73 @@
+﻿#=============================================
+#---- Fontosabb CMDlet-ek ----
+#=============================================
+(Get-Help Foreach-Object).Syntax
+Get-ChildItem -Path C:\ | Tee-Object -FilePath C:\PowerShell\dir.txt | Where-Object {$_.Name -eq "Windows"}
+Get-Content -Path C:\PowerShell\dir.txt
+Get-Service | Group-Object -Property Status
+Get-Process | Group-Object -Property ProcessName, Company
+Get-Process | Group-Object -Property Company -NoElement
+Get-Process | Get-Member
+Get-Process | Select-Object -Property Name, Company, Description
+Get-Process | Select-Object -Property Name, Company, Description | Get-Member
+Get-Process | Select-Object -First 3
+Get-Process | Select-Object -First 3 | Get-Member
+1,1,3,56,3,1,1,1,3 | Select-Object -Unique
+Get-Service a* | Group-Object -Property Status | Select-Object -ExpandProperty Group
+Get-ChildItem -Path C:\Windows | Select-Object -Property Name, @{Name="Típus";Expression={if ($_.Extension -eq ".log"){"Naplófájl"}else{"Reguláris fájl"}}}
+Get-ChildItem -Path C:\Windows| Format-Table -Property Name,@{Expression={if($_.psiscontainer){"Könyvtár"}else{"Fájl"}};Label="Típus";width=10}
+Get-Process | Sort-Object -Property WorkingSet -Descending
+$a = Get-Process
+Start-Process -FilePath notepad
+$b = Get-Process
+Compare-Object -ReferenceObject $a -DifferenceObject $b
+Get-Content -Path .\StartDemo.ps1 | Measure-Object -IgnoreWhiteSpace -Line -Word -Char | Format-Table -AutoSize
+Get-Content -Path .\StartDemo.ps1 | Measure-Object -Line -Word -Char | Format-Table -AutoSize
+Get-Process | Measure-Object -Property WorkingSet -Sum -Average -Max -Min
+(Get-Process | Measure-Object -Property WorkingSet -Sum).Sum / 1mb
+Get-ChildItem | Out-File -FilePath C:\PowerShell\dir.txt
+Get-ChildItem | Export-Csv -Path C:\PowerShell\dir.csv
+Import-Csv -Path C:\PowerShell\dir.csv
+Get-ChildItem | Export-CliXML -Path C:\PowerShell\dir.xml
+Import-CliXML -Path C:\PowerShell\dir.xml
+Get-Process | Out-File -FilePath C:\PowerShell\proc.txt -Force
+Get-Process | Export-Csv -Path C:\PowerShell\proc.csv -Force
+Get-Process | Export-CLIXML -Path C:\PowerShell\proc.xml -Force
+$p1 = Get-Content -Path C:\PowerShell\proc.txt
+$p2 = Import-Csv -Path C:\PowerShell\proc.csv
+$p3 = Import-CliXML -Path C:\PowerShell\proc.xml
+$p1 | Get-Member
+$p2 | Get-Member
+$p3 | Get-Member
+$p1[0]
+$p1[3]
+$p2[0]
+$p3[0]
+$p1[3].SubString(58)
+$p2[0].Name
+$p3[0].Name 
+#=============================================
+#---- Környezet beállítása ----
+#=============================================
+$host
+$host | Get-Member
+$host.UI | Get-Member
+$host.UI.RawUI | Get-Member
+$host.UI.RawUI.WindowTitle = "Hello"
+$host.UI.RawUI.BackgroundColor = "red"
+$host.UI.RawUI.ForegroundColor = "yellow"
+cls
+$host.UI.RawUI.BackgroundColor = "black"
+$host.UI.RawUI.ForegroundColor = "white"
+cls
+Get-PSReadlineOption
+Set-PSReadLineOption -Colors @{Command = 'Magenta';Number = 'DarkGray'}
+$Host.PrivateData.ErrorBackgroundColor = "Blue"
+$Host.PrivateData.ErrorForegroundColor = "White"
+cls
+# Export-Console C:\PowerShell\console
+# Get-Content -Path C:\PowerShell\console.psc1
+# powershell.exe -PSConsoleFile C:\PowerShell\console.psc1
+Start-Transcript -Path C:\PowerShell\transcript.txt
+Get-Content "$env:UserProfile\Documents\WindowsPowerShell\profile.ps1"
+Stop-Transcript

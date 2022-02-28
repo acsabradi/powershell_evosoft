@@ -1,0 +1,15 @@
+﻿#=============================================
+#---- Ciklus ----
+#=============================================
+# While
+Get-Content -Path .\03_while.ps1
+.\03_while.ps1
+# Do..While
+Get-Content -Path .\03_dowhile.ps1
+.\03_dowhile.ps1
+# Do..Until
+Get-Content -Path .\03_dountil.ps1
+.\03_dountil.ps1
+# For
+Get-Content -Path .\03_for.ps1
+.\03_for.ps1

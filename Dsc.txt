@@ -1,0 +1,26 @@
+﻿# ---- Imperative
+Install-Module ServerManager
+if (-not (Get-WindowsFeature "Web-Server").Installed)
+{
+   try
+       {
+          Add-WindowsFeature "Web-Server"
+       }
+   catch
+       {
+	Write-error $_
+       }
+}
+
+# ---- Declarative
+Configuration Webconfig
+{
+   Node localhost
+   { 
+         WindowsFeature IIS
+         {
+            Ensure = "Present"/"Absent"
+            Name = "Web-Server"
+         }
+    }
+}

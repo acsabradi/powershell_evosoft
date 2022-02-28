@@ -1,0 +1,33 @@
+﻿#=============================================
+#---- POWERSHELL 5 ÚJDONSÁGOK ----
+#=============================================
+# PowerShell PackageManagement
+[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+Get-Command -Noun Module | Format-Table -AutoSize
+Import-Module –Name PackageManagement
+Get-Command –Module PackageManagement
+Import-Module –Name PowerShellGet
+Get-Command –Module PowerShellGet
+Find-PackageProvider
+Get-PackageProvider
+Get-PackageSource
+Get-Package
+Find-Package | Select-Object -First 10
+Find-Module | Select-Object -First 10
+Find-Package *Excel* | Out-GridView
+Find-Package -Name PsExcel | Install-Package
+Get-Package -Name PsExcel | Format-List
+Get-InstalledModule
+Get-PSRepository
+Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
+Get-PSRepository
+Find-Command -Repository PSGallery | Select-Object -First 10
+Find-Command -Repository PSGallery -Name Set-NTFSOwner
+Find-Command -Repository PSGallery -ModuleName NTFSSecurity
+Find-Script | Select-Object -First 10
+Find-Script -Repository PSGallery -Name MineSweeper
+Install-Script -Name Minesweeper -Scope CurrentUser
+Get-InstalledScript
+minesweeper.ps1
+Save-Script minesweeper -Path C:\PowerShell\Temp
+Get-Content C:\PowerShell\Temp\minesweeper.ps1

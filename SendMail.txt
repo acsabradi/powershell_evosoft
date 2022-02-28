@@ -1,0 +1,48 @@
+﻿function sendmail1
+{
+PARAM
+(
+	$EmailFrom = "valaki@ceg.hu"
+	$EmailTo = "masvalaki@ceg.com" 
+	$Subject = "Levél tárgya" 
+	$Body	= "A levél törzse"
+	$SMTPServer = "smtp.gmail.com"
+) 
+
+	$SMTPClient = New-Object Net.Mail.SmtpClient($SmtpServer, 587) 
+	$SMTPClient.EnableSsl = $true
+	$SMTPUser=(Get-ItemProperty "hklm:\software\MailData" -Name User).User
+	$SMTPPass=(Get-ItemProperty "hklm:\software\MailData" -Name PassPhrase).PassPhrase
+	$SMTPClient.Credentials = New-Object System.Net.NetworkCredential($SMTPUser,$SMTPPass); 
+	$SMTPClient.Send($EmailFrom, $EmailTo, $Subject, $Body)
+}
+
+function sendmail2
+{
+PARAM
+(
+	$From = "valaki@ceg.hu"
+	$To = "valaki@ceg.com" 
+	$Cc = "masvalaki@ceg.com" 
+	$Attachment = "C:\Temp\kep.jpg"
+	$Subject = "Levél tárgya"
+	$Body = "<h2>A levél törzse</h2><br><br>"
+	$Body += "A levél törzse" 
+	$SMTPServer = "smtp.gmail.com"
+	$SMTPPort = "587"
+)
+{
+	$secpasswd = ConvertTo-SecureString ((Get-ItemProperty "hklm:\software\MailData" -Name PassPhrase).PassPhrase) -AsPlainText -Force
+	$mycreds = New-Object System.Management.Automation.PSCredential (((Get-ItemProperty "hklm:\software\MailData" -Name User).User), $secpasswd)
+	Send-MailMessage -From $From 
+			 -To $To 
+			 -Cc $Cc 
+  			 -Subject $Subject 
+			 -Body $Body 
+			 -BodyAsHtml 
+			 -SmtpServer $SMTPServer 
+			 -Port $SMTPPort 
+			 -UseSsl 
+			 -Credential $mycreds 
+			 -Attachments $Attachment
+}

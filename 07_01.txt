@@ -1,0 +1,25 @@
+﻿#=============================================
+#---- POWERSHELL 3 ÚJDONSÁGOK ----
+#=============================================
+# General
+$PSVersionTable
+Show-Command Get-Eventlog
+# Alapértelmezett paraméterek
+$PSDefaultParameterValues
+$PSDefaultParameterValues.Add("Get-CimInstance:ClassName","Win32_BIOS")
+$PSDefaultParameterValues
+Get-CimInstance
+Get-CimInstance -ClassName Win32_Process
+$PSDefaultParameterValues.Remove("Get-CimInstance:ClassName")
+$PSDefaultParameterValues
+# Where-Object cmdlet tulajdonságainak változása
+Get-Service | Where-Object {$_.Status -eq "Running" }
+Get-Service | Where-Object Status -eq 'Running'
+# Ordered hash
+$hash = @{A=1; B=2; C=3; D=4}
+$hash
+$hash = [Ordered]@{A=1; B=2; C=3; D=4}
+$hash
+#---- Workflow
+Get-Content -Path .\WorkFlow.ps1
+.\WorkFlow.ps1

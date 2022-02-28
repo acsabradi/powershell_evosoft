@@ -1,0 +1,43 @@
+﻿#=============================================
+#---- Fájlkezelés ----
+#=============================================
+New-Item -Path C:\PowerShell -Name szoveg.txt -Type File -Value "PowerShell"
+New-Item -Path C:\PowerShell -Name "Temp" -Type Directory
+Get-Content -Path C:\PowerShell\szoveg.txt
+Remove-Item -Path C:\PowerShell\szoveg.txt
+Test-Path -Path C:\PowerShell\szoveg.txt
+Test-Path -Path C:\PowerShell\Temp
+Get-ChildItem -Path C:\P*
+Get-ChildItem -Path C:\P* -Force
+(Get-Item -Path C:\PowerShell\chdir.txt).Attributes
+(Get-Item -Path C:\PowerShell\chdir.txt).Attributes = "Archive, Hidden"
+(Get-Item -Path C:\PowerShell\chdir.txt).Attributes
+(Get-Item -Path C:\PowerShell\chdir.txt -Force).Attributes
+(Get-Item -Path C:\PowerShell\chdir.txt -Force).Attributes.GetType().FullName
+(Get-Item -Path C:\PowerShell\chdir.txt -Force).Attributes = "Archive"
+# ILSpy-jal megnézni: System.IO.FileAttributes 
+Get-Acl -Path C:\PowerShell\chdir.txt | fl
+$acl =  Get-Acl -Path C:\PowerShell\chdir.txt
+# Gipsz Jakab létrehozása 
+$Password = Read-Host -AsSecureString
+New-LocalUser "Jgipsz" -Password $Password -FullName "Gipsz Jakab" -Description "Gipsz Jakabné férje."
+$entry = New-Object System.Security.AccessControl.FileSystemAccessRule("Jgipsz","Read","Deny")
+# ILSpy-jal megnézni: System.Security.AccessControl.FileSystemRights 
+$entry
+$acl.AddAccessRule($entry)
+Set-Acl -Path C:\PowerShell\chdir.txt $acl
+Get-Acl -Path C:\PowerShell\chdir.txt | fl
+#=============================================
+#---- Alternatív adatfolyamok kezelése ----
+#=============================================
+New-Item -Path C:\PowerShell -Name szoveg.txt -Type File -Value "Microsoft"
+cmd.exe /c 'echo Windows > C:\PowerShell\szoveg.txt:ads.txt'
+Get-Item -Path C:\PowerShell\szoveg.txt
+Get-Item -Path C:\PowerShell\szoveg.txt -Stream *
+Get-Content -Path C:\PowerShell\szoveg.txt
+Get-Content -Path C:\PowerShell\szoveg.txt -Stream ads.txt -Encoding Oem
+Set-Content -Path C:\PowerShell\szoveg.txt -Stream masik.txt -Value "PowerShell"
+Get-Item -Path C:\PowerShell\szoveg.txt -Stream *
+Get-Content -Path C:\PowerShell\szoveg.txt -Stream masik.txt
+Remove-Item -Path C:\PowerShell\szoveg.txt -Stream ads.txt,masik.txt
+Get-Item -Path C:\PowerShell\szoveg.txt -Stream *

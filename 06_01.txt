@@ -1,0 +1,29 @@
+﻿#=============================================
+#---- Megszakító és nem megszakító hibák ----
+#=============================================
+1+2; Write-Error "Hiba!"; 2-1
+1+2; Throw "Hiba!"; 2-1
+$ErrorActionPreference = "SilentlyContinue"
+1+2; Write-Error "Hiba!"; 2-1
+$ErrorActionPreference = "Continue"
+1+2; Remove-Item -Path C:\PowerShell\nincs.txt; 2-1
+1+2; Remove-Item -Path C:\PowerShell\nincs.txt -Debug; 2-1
+1+2; Remove-Item -Path C:\PowerShell\nincs.txt -Debug -ErrorVariable hiba; 2-1
+$hiba
+1+2; Remove-Item -Path C:\PowerShell\nincs.txt -Debug -ErrorVariable hiba -ErrorAction Stop; 2-1
+$hiba
+$error[0]
+$error[1]
+$error[2]
+$MaximumErrorCount
+$error[1] | Get-Member
+$error[1].CategoryInfo
+Write-Error -Message "hello"
+Write-Warning -Message "hello"
+Get-Content .\Debug.ps1
+.\Debug.ps1
+$verbosepreference = "Continue"
+.\Debug.ps1
+$verbosepreference = "SilentlyContinue"
+.\Debug.ps1
+# Lépésenkénti futtatás (F11) PGUI Editorban vagy ISE-ben 
