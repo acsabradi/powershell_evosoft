@@ -22,6 +22,8 @@ $string = "Powershell"
 1+2
 Write-Host 1+2
 Write-Host (1+2)
+"összeadás (1+3)"
+"összeadás $(1+3)"
 Get-Date
 "Get-Date"
 &"Get-Date"
