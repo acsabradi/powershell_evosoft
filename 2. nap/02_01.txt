@@ -1,0 +1,56 @@
+﻿#=============================================
+#---- Változók ----
+#=============================================
+$valtozo = "hello"
+$valtozo
+$valtozo.GetType()
+$valtozo = 5
+$valtozo
+$valtozo.GetType()
+$valtozo + 3
+$valtozo = Get-ChildItem
+$valtozo
+$valtozo.GetType()
+Set-PSDebug -Strict
+$variable 
+$valtozo.tulajdonsag
+Set-PSDebug -Off
+$variable
+Set-StrictMode -Version Latest
+$variable 
+$valtozo.tulajdonsag
+Set-StrictMode -Off
+New-Variable -Name Pi -value 3.1415
+$Pi
+Clear-Variable -Name Pi
+$Pi
+Get-Variable -Name Pi
+Set-Variable -Name Pi -Value 3.1415
+$Pi
+Remove-Variable -Name Pi
+$Pi
+Get-Variable -Name Pi
+#=============================================
+#---- Változótípusok ----
+#=============================================
+$var = 1
+$var
+$var = "hello"
+$var
+[System.Int32]$var = 1
+$var= "hello"
+$var
+$var = "123"
+$var
+$var.GetType()
+1+2.0+"3"
+(1+2.0+"3").GetType().FullName
+1+"2"
+"1"+2
+$x ="123"
+$y = [int]$X
+$x
+$y
+$x.GetType()
+$y.GetType()
+($x -as [long]).GetType()

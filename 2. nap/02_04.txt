@@ -1,0 +1,102 @@
+﻿#=============================================
+# ---- Helyettesítő karakterek ----
+#=============================================
+Dir *.txt
+Get-Command *-Command
+Get-Command *-Co*
+Get-Command Get-Co?????
+Get-Command Get-Co[mn]????
+Get-Command Get-Co[m-n]????
+#=============================================
+# ---- LIKE használata ----
+#=============================================
+"alma" -like "?l*a"
+"alma" -notlike "?l*a"
+"alma" -like "?l*[aeou]"
+"alma" -notlike "?l*[aeou]"
+"almás pite" -like "?l*[aeou]"
+"almás pite" -like "?l*[0-9]"
+Get-Service
+Get-Service -Name "[ab]*svc"
+"Gőgös", "Gúnár", "Gedeon" -like "g*n*"  
+"Mosó", "Masa", "mosodája" -clike "[m-n]o?*"
+#=============================================
+#---- Reguláris kifejezések ----
+#=============================================
+Regex tesztelő és magyarázó: https://regexr.com/
+"almás pite" -match ".l"
+"almás pite" -match ".l.*"
+"almás pite" -match ".l.+[aeou]+.*"
+"almás pite" -match ".t"
+"almás pite" -match "^.l"
+"almás pite" -match "^.t"
+"almás pite" -match "[aeou]$"
+"almás pite" -match "^.l.*\..*"
+"almás pite" -match "^.l.*\s.*"
+"PowerShell" -like "Power?hell"
+"PowerShell" -match "Power?hell"
+"PowerShell" -match "Power.?hell"
+$varos = "Budapest","Debrecen","Szeged","Miskolc","Pécs","Győr","Nyíregyháza","Kecskemét","Székesfehérvár","Szombathely"
+$varos -match "^[bs].*"
+$varos -match "^[^bs].*"
+$varos -match "^[^bs].*$"
+$varos -match "^[^bs].+$"
+$varos -match "^[^bs].?$"
+$varos -match "^\w.{3}$"
+$varos -match "^[b-k].*$"
+$varos -match "^[b-k-[g]].*$"
+"www.domain.com" -match "[a-z]{3}\.[a-z]+\.[a-z]{3}"
+"Hello World!" -match "\b[a-z]+\b"
+$matches
+"Hello World!" -match "\b[a-z]+\b\s\b[a-z]+\b"
+$matches
+"Hello World!" -match "\b\w+\b"
+$matches
+"Hello World!" -match "\b\w+\b\s\b\w+\b"
+$matches
+"123-456" -match "\d{3}-\d{3}"
+$matches
+"123-456" -match "(\d{3})-(\d{3})"
+$matches 
+"123-456" -match "(?<a>\d{3})-(?<b>\d{3})"
+$matches
+$matches.a
+$matches.b
+"Power-shell" -match "Power[\s|-]shell"
+$matches
+"Power shell" -match "Power[\S|-]shell"
+$matches
+"Powershell" -match "Power[\S|-]shell"
+"Power-shell" -match "Power[\S|-]shell"
+"Power+shell" -match "Power[\S|-]shell"
+"jgipsz@domain.local" -match "\b\w+@\w+\.[a-z]{2,4}\b"
+"jgipsz@domain.loc" -match "\b\w+@\w+\.[a-z]{2,4}\b"
+"www.domain.local" -match "(?<fqdn>(?<local>(?<host>[a-z0-9]+)\.(?<domain>[a-z0-9]+))\.(?<tld>[a-z]{2,}))"
+$matches
+$matches.fqdn
+$matches.local
+$matches.host
+$matches.domain
+$matches.tld
+"PowerShell is (a) great (command-shell)!" -match "\([\w|-]*\)"
+$matches
+#=============================================
+#---- RegEx objektum ----
+#=============================================
+$pattern = [regex] "\([\w|-]*\)"
+$pattern.matches("PowerShell is (a) great (command-shell)!")
+$szoveg = $pattern.matches("PowerShell is (a) great (command-shell)!")
+$szoveg.value
+#=============================================
+#---- Select-String ----
+#=============================================
+"PowerShell is (a) great (command-shell)!" | Select-String -Pattern "\([\w|-]*\)"
+$szoveg = "PowerShell is (a) great (command-shell)!" | Select-String -Pattern "\([\w|-]*\)"
+$szoveg | Get-Member
+$szoveg.Matches
+$szoveg = "PowerShell is (a) great (command-shell)!" | Select-String -Pattern "\([\w|-]*\)" -AllMatches
+$szoveg.Matches
+$szoveg.Matches.Length
+$szoveg = Get-ChildItem -Path "$PSHOME\en-US\*.txt" | Select-String -Pattern '\(WMI\)'
+$szoveg
+Get-ChildItem $env:windir\*.log | Select-String -Pattern "Error" -List | Format-List -Property Filename,Line,Linenumber

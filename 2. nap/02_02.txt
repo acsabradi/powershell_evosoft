@@ -1,0 +1,140 @@
+﻿#=============================================
+#---- Számológép ----
+#=============================================
+8+12
+9-5
+6*7
+45/9
+10%3
+1kb
+1mb
+1gb
+#=============================================
+#---- Idézőjelek ----
+#=============================================
+$string = "Powershell"
+"Ez itt a $string"
+'Ez itt a $string'
+"Ez itt a `$string"
+#=============================================
+#---- Kifejezés és parancsmód ----
+#=============================================
+1+2
+Write-Host 1+2
+Write-Host (1+2)
+"összeadás (1+3)"
+"összeadás $(1+3)"
+Get-Date
+"Get-Date"
+&"Get-Date"
+(Get-Date).Year + 1
+Get-Command
+Get-Command.Count  
+(Get-Command).Count
+#=============================================
+#---- Output ----
+#=============================================
+"WSearch"
+$search = "WSearch"
+Write-Output "WSearch" 
+Write-Host "WSearch"
+Write-Output "WSearch" | Get-Service
+Write-Host "WSearch" | Get-Service
+#=============================================
+#---- Tömbök ----
+#=============================================
+$array = @(1,2,3,4,5)
+$tomb = 6..10
+$array
+$array.GetType()
+$tomb
+$tomb.GetType()
+[int32[]]$intarray = 100,200,300,400,500
+$intarray
+$intarray.GetType()
+$tomb = $array
+$array
+$tomb
+$array[0] = 0
+$array
+$tomb
+$tomb = New-Object -TypeName "int[]" -ArgumentList 10
+$tomb
+$tomb[0] = "szoveg"
+$array[2]
+$array[2..4]
+$array[1,3]
+$array[5]
+$array[-1]
+$array[-5]
+$urestomb = @()
+$urestomb = $urestomb+1
+$urestomb = $urestomb+2
+$urestomb = $urestomb+3
+$urestomb
+$urestomb.Count
+$urestomb.Length
+$urestomb.Rank
+$tomb = New-Object system.collections.arraylist
+$tomb = [system.collections.arraylist] (1,2,3,4,5)
+$tomb | Get-Member
+$tomb[0] | Get-Member
+Get-Member -InputObject $array
+Get-Member -InputObject $tomb
+$tomb
+$tomb.Contains(4)
+$tomb.Count
+$tomb.Add(6)
+$tomb.Count
+$tomb.Insert(3,7)
+$tomb
+$tomb.Sort()
+$tomb
+$tabla = (1,2,3,4,5),("A","B","C","D","E")
+$tabla[0][0]
+$tabla[0][3]
+$tabla[1][0]
+$tabla[1][3]
+$tabla.Rank
+$tomb = New-Object -TypeName "int[,]" -ArgumentList 2,2
+$tomb[0,0] = 1
+$tomb[0,1] = 2
+$tomb[1,0] = 3
+$tomb[1,1] = 4
+$tomb.Rank
+$tomb
+$tomb = Get-ChildItem C:\Powershell 
+$tomb.GetType()
+$tomb | Get-Member
+$hash = @{ Név = "Gipsz Jakab"; Cím = "Budapest"; "E-mail"="jgipsz@domain.local"}
+$hash
+$hash["Cím"]
+$hash.Cím
+$hash | Get-Member
+$hash.Add("Név","Kőműves Kelemen")
+$hash.Név = "Kőműves Kelemen"
+$hash
+$contacts = New-Object system.collections.arraylist
+$contacts.Add([ordered]@{Név="Gipsz Jakab"; "E-mail"="jgipsz@domain.local"; Cím="Budapest"})
+$contacts.Add([ordered]@{Név="Kőműves Kelemen"; "E-mail"="kkelemen@domain.local"; Cím="Szeged"})
+$contacts
+$contacts[0]
+$contacts[1]
+$contacts[1].E-mail
+$contacts[1]."E-mail"
+#=============================================
+#---- Dátumok ----
+#=============================================
+Get-Date 
+Get-Date | Get-Member
+(Get-Date).Year
+(Get-Date).Month
+(Get-Date).Day
+(Get-Date).AddYears(10).DayOfWeek
+(Get-Date).AddYears(10).DayOfWeek | Get-Member
+$theday = (Get-Date).AddYears(10).DayOfWeek
+Get-Culture
+Get-Culture | Get-Member
+(Get-Culture).DateTimeFormat
+(Get-Culture).DateTimeFormat | Get-Member
+((Get-Culture).DateTimeFormat).GetDayName($theday)
