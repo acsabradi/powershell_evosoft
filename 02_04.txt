@@ -23,6 +23,7 @@ Get-Service -Name "[ab]*svc"
 #=============================================
 #---- Reguláris kifejezések ----
 #=============================================
+Regex tesztelő és magyarázó: https://regexr.com/
 "almás pite" -match ".l"
 "almás pite" -match ".l.*"
 "almás pite" -match ".l.+[aeou]+.*"
