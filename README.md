@@ -33,7 +33,7 @@ Get-Help -Name chdir -ShowWindow # a help egy külön ablakban jelenik meg
 Get-Help -Name chdir -Full | Out-File C:\PowerShell\chdir.txt # a teljes help lementése egy fájlba
 Get-Help -Name chdir -Parameter Path # a path paraméter help-je
 Get-Help -Name Update-Help # lokális help dokumentáció frissítése
-Get-Help -Name about_* # about doksik (hosszabb programelem leírás) listázása
+Get-Help -Name about_* # about doksik (hosszabb tutorial-ok) listázása
 Get-Help -Name about_Aliases # alias-okról szóló about doksi megnyitása
 ```
 
@@ -43,23 +43,33 @@ Get-Help -Name about_Aliases # alias-okról szóló about doksi megnyitása
 Push-Location # az aktuális path lementése
 Set-Location -Path C:\Windows # a megadott path-ra ugrás
 Pop-Location # ugrás a lementett path-ra
-Get-Help -Name about_*
-Get-Help -Name about_Aliases
-Get-ChildItem
-(Get-ChildItem).GetType()
-Get-ChildItem | Get-Member
+Get-ChildItem # az aktuális path-ban lévő fájlok és mappák
+Get-ChildItem | Get-Member # típusnevek (mappa és/vagy fájl), valamint azok elemei (függvény, property...)
+```
+
+> A `Get-ChildItem` egy objektumtömböt ad, viszont a `Get-Member` nem a tömbről ad infót, hanem a tömbben szereplő objektumokról.
+
+```ps
 Get-Member -InputObject (Get-ChildItem)
-dir C:\Windows\System32\*.log /s
+```
+
+> Így már tényleg a tömbről kapunk infót.
+
+```ps
 Get-ChildItem -Path C:\Windows\System32 -Include *.log -Recurse
-Get-ChildItem -Path C:\Windows\System32 -Include *.log -Recurse | Get-Member
-Get-ChildItem -Path C:\Windows\System32 -Include *.log -Recurse | Format-List
-Get-ChildItem -Path C:\Windows\System32 -Include *.log -Recurse | Format-List -Property FullName, CreationTime, LastWriteTime, LastAccessTime
-Get-ChildItem -Path C:\Windows\System32 -Include *.log -Recurse | Format-Table -Property FullName, CreationTime, LastWriteTime, LastAccessTime
-Get-ChildItem -Path C:\Windows\System32 -Include *.log -Recurse | Format-List -Property *
-Show-Command -Name Get-ChildItem -PassThru
-Get-ChildItem -Path C:\Windows\System32 -Include *.log -Recurse | Out-GridView
-Get-ChildItem -Path C:\Windows\System32 -Include *.log -Recurse | Out-GridView -PassThru
-"Hello world!"; 1+2
+```
+
+> - `-Path`: Innen listázza az elemeket.
+> - `-Include *.log`: Csak erre a mintára illeszkedő elemeket adja vissza.
+> - `-Recurse`: Az almappákban is keres.
+
+```ps
+Get-ChildItem -Path C:\Windows\System32 -Include *.log -Recurse | Format-List # listába írja ki az elemeket -> minden property-nek új sor
+Get-ChildItem -Path C:\Windows\System32 -Include *.log -Recurse | Format-List -Property FullName, CreationTime, LastWriteTime, LastAccessTime # megadható, hogy mely property-ket akarjuk a listában látni
+Get-ChildItem -Path C:\Windows\System32 -Include *.log -Recurse | Format-Table -Property FullName, CreationTime, LastWriteTime, LastAccessTime # ugyanaz, csak itt táblázat a kimenet
+Get-ChildItem -Path C:\Windows\System32 -Include *.log -Recurse | Format-List -Property * # minden property kilistázása
+Show-Command -Name Get-ChildItem -PassThru # a Get-ChildItem paraméterei egy felugró ablakban megadhatók
+Get-ChildItem -Path C:\Windows\System32 -Include *.log -Recurse | Out-GridView # az eredmény egy külön ablakban jelenik meg
 Get-History
 Get-History | Export-Clixml -Path C:\PowerShell\Commands.xml
 Clear-History
