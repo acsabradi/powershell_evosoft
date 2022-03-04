@@ -70,15 +70,35 @@ Get-ChildItem -Path C:\Windows\System32 -Include *.log -Recurse | Format-Table -
 Get-ChildItem -Path C:\Windows\System32 -Include *.log -Recurse | Format-List -Property * # minden property kilistázása
 Show-Command -Name Get-ChildItem -PassThru # a Get-ChildItem paraméterei egy felugró ablakban megadhatók
 Get-ChildItem -Path C:\Windows\System32 -Include *.log -Recurse | Out-GridView # az eredmény egy külön ablakban jelenik meg
-Get-History
-Get-History | Export-Clixml -Path C:\PowerShell\Commands.xml
-Clear-History
-Get-History
-Add-History -InputObject (Import-Clixml -Path C:\PowerShell\Commands.xml)
-Get-History
+```
+
+### `Get-History`
+
+```ps
+Get-History # az aktuálisan session-ban használt parancsok
+Get-History | Export-Clixml -Path C:\PowerShell\Commands.xml # az előbbi lementése CLI XML formátumba
+Clear-History # session history törlése
+Add-History -InputObject (Import-Clixml -Path C:\PowerShell\Commands.xml) # history beimportálása
 (Get-PSReadlineOption).HistorySavePath
-Get-Content -Path (Get-PSReadlineOption).HistorySavePath
+```
+
+> - A `Get-PSReadlineOption` a módosítható konfigurációkat adja vissza.
+> - A `HistorySavePath` visszaadja annak a textfájlnak a path-ját ahová az összes használt parancs lementődik.
+
+```ps
+Get-Content -Path (Get-PSReadlineOption).HistorySavePath # a history textfájl kiiratása
+```
+
+### Execution Policy
+
+[**execution policy dokumentáció**](https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_execution_policies?view=powershell-7.2)
+
+```ps
 Get-ExecutionPolicy -List
-Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted
-Get-ExecutionPolicy -List
+```
+
+> Visszaadja az egyes scope-okhoz rendelt policy-t. A scope-ok precedencia sorrendben vannak kiírva. Egy nagyobb precedenciával bíró scope policy-ja akkor is érvényre jut, ha egy kisebb precedenciájú scope szigorúbb policy-t ír elő.
+
+```ps
+Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted # Unrestricted policy beállítása a CurrentUser scope-hoz
 ```
