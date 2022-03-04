@@ -102,3 +102,117 @@ Get-ExecutionPolicy -List
 ```ps
 Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted # Unrestricted policy beállítása a CurrentUser scope-hoz
 ```
+
+## Alias-ok
+
+Az *alias*-ok PowerShell parancsok és cmdlet-ek alternatív, rövidebb nevei.
+
+```ps
+Get-Alias # az összes alias lekérése
+Set-Location -Path Alias: # átmegyünk az Alias drive-ra, ott Get-ChildItem-el ugyanazt kapjuk, mint az előző paranccsal
+Get-Alias -Name C* # C-vel kezdődő alias-ok
+Get-Alias -Definition Clear-Host # Clear-Host cmdlet alias-a
+New-Alias # új alias definiálása, enter leütése után adjuk meg az adatokat
+```
+
+## PSDrive
+
+```ps
+Get-PSDrive
+Get-PSProvider
+Get-ChildItem -Path HKCU:
+dir HKCU:\System -r
+# Adjuk meg a következő paramétereket:
+# Name: PowerShell
+# PSProvider: FileSystem
+# Root: C:\Powershell
+New-PSDrive
+Get-PSDrive
+Set-Location -Path Powershell:
+Get-ChildItem
+Jegyzet .\chdir.txt
+Jegyzet Powershell:\chdir.txt
+Get-Content -Path Powershell:\chdir.txt
+Resolve-Path -Path Powershell:\chdir.txt
+Resolve-Path -Path Powershell:\chdir.txt | Format-List -Property *
+Jegyzet (Resolve-Path -Path Powershell:\chdir.txt).ProviderPath
+Set-Location C:
+Remove-PSDrive -Name Powershell
+Get-PSDrive
+#=============================================
+#---- Metódusok és tulajdonságok ----
+#=============================================
+Get-ChildItem -Path C:\PowerShell
+Get-Item -Path C:\PowerShell\chdir.txt
+Get-Item -Path C:\PowerShell\chdir.txt | Get-Member
+Get-Item -Path C:\PowerShell\chdir.txt | Get-Member -View Base
+Get-Item -Path C:\PowerShell\chdir.txt | Get-Member -View Adapted
+Get-Item -Path C:\PowerShell\chdir.txt | Get-Member -View Extended
+Get-Item -Path C:\PowerShell\chdir.txt | Get-Member -View All
+(Get-Item -Path C:\PowerShell\chdir.txt).GetType()
+(Get-Item -Path C:\PowerShell\chdir.txt).Length
+Get-Process | Get-Member
+Get-Process | Get-Member -View Base
+Get-Process | Get-Member -View Adapted
+Get-Process | Get-Member -View Extended
+Get-Process | Get-Member -View All
+#=============================================
+#---- Metódushasználat ----
+#=============================================
+5
+5 | Get-Member
+(5).Equals(5)
+(5).Equals(3)
+((5) | Get-Member -Name Equals).Definition
+5 | Get-Member | Format-List -Property Definition
+Get-Item -Path C:\Powershell | Get-Member
+(Get-Item -Path C:\Powershell).GetAccessControl()
+Start-Process -FilePath notepad
+Get-Process -Name notepad
+Get-Process -Name notepad | Get-Member
+(Get-Process -Name notepad).Kill()
+#=============================================
+#---- PipeLine ----
+#=============================================
+Start-Process -FilePath notepad
+Get-Process -Name notepad
+$np = Get-Process -Name notepad
+$np
+Stop-Process -InputObject $np
+Start-Process notepad
+Stop-Process notepad
+Get-Process notepad | Stop-Process
+Get-Help Stop-Process
+Get-Help Stop-Process -Parameter InputObject
+Get-Help Stop-Process -Parameter Name
+Start-Process -FilePath notepad
+"notepad" | Stop-Process
+$object = New-Object -TypeName PSObject
+Add-Member -InputObject $object -MemberType NoteProperty -Name Name -Value "notepad"
+$object
+$object | Stop-Process
+"BITS","WinRM" | Get-Service
+Get-Help Get-Service
+Get-Help Get-Service -Parameter Name
+Get-Help Start-Service -Parameter Name
+Get-Help Stop-Service -Parameter Name
+$object.Name = "WSearch"
+$object | Get-Service
+#=============================================
+#---- Modulok használata ----
+#=============================================
+Get-PSSnapin
+Get-PSSnapin -Registered
+Get-Module
+Get-Module -ListAvailable
+$env:PSModulePath
+Get-Command -Module NetTCPIP
+Import-Module -Name NetTCPIP
+Get-Module
+Get-NetIpAddress
+NetTCPIP\Get-NetIpAddress
+Import-Module -Name NetTCPIP -Force -Prefix x -PassThru
+Get-xNetIpAddress
+Remove-Module -Name NetTCPIP
+Get-Module
+```
