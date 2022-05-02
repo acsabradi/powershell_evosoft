@@ -127,81 +127,55 @@ New-PSDrive # új PSDrive felvétele
 Set-Location -Path Powershell: # ugrás a Powershell drive-ra
 
 Resolve-Path -Path Powershell:\chdir.txt | Format-List # drive path feloldása; a ProviderPath attribútum tartalmazza az abszolút path-t
+```
 
-#=============================================
-#---- Metódusok és tulajdonságok ----
-#=============================================
-Get-ChildItem -Path C:\PowerShell
-Get-Item -Path C:\PowerShell\chdir.txt
-Get-Item -Path C:\PowerShell\chdir.txt | Get-Member
-Get-Item -Path C:\PowerShell\chdir.txt | Get-Member -View Base
-Get-Item -Path C:\PowerShell\chdir.txt | Get-Member -View Adapted
-Get-Item -Path C:\PowerShell\chdir.txt | Get-Member -View Extended
-Get-Item -Path C:\PowerShell\chdir.txt | Get-Member -View All
-(Get-Item -Path C:\PowerShell\chdir.txt).GetType()
-(Get-Item -Path C:\PowerShell\chdir.txt).Length
-Get-Process | Get-Member
-Get-Process | Get-Member -View Base
-Get-Process | Get-Member -View Adapted
-Get-Process | Get-Member -View Extended
-Get-Process | Get-Member -View All
-#=============================================
-#---- Metódushasználat ----
-#=============================================
-5
-5 | Get-Member
+## Metódusok használata
+
+Ha cmdlet-el lekért objektum property-jét vagy függvényét akarjuk használni, akkor a kifejezést zárójelbe kell tenni.
+
+```ps
+Get-Item -Path C:\PowerShell\chdir.txt | Get-Member # Lekérjük az objektum elemeit
+
+(Get-Item -Path C:\PowerShell\chdir.txt).GetType() # Egy metódus hívása
+
+(Get-Item -Path C:\PowerShell\chdir.txt).Length # Egy property lekérése
+
+# Integer esetén ugyanez áll fenn:
 (5).Equals(5)
-(5).Equals(3)
-((5) | Get-Member -Name Equals).Definition
-5 | Get-Member | Format-List -Property Definition
-Get-Item -Path C:\Powershell | Get-Member
-(Get-Item -Path C:\Powershell).GetAccessControl()
-Start-Process -FilePath notepad
-Get-Process -Name notepad
-Get-Process -Name notepad | Get-Member
-(Get-Process -Name notepad).Kill()
-#=============================================
-#---- PipeLine ----
-#=============================================
-Start-Process -FilePath notepad
-Get-Process -Name notepad
-$np = Get-Process -Name notepad
-$np
-Stop-Process -InputObject $np
-Start-Process notepad
-Stop-Process notepad
+```
+
+## Pipeline használata
+
+A cmdlet dokumentáció alapján lehet eldönteni, hogy az adott parancsnak mit lehet átadni a pipeline-ban.
+
+```ps
 Get-Process notepad | Stop-Process
-Get-Help Stop-Process
-Get-Help Stop-Process -Parameter InputObject
-Get-Help Stop-Process -Parameter Name
-Start-Process -FilePath notepad
+```
+
+Ez a pipeline működik, mert:
+- a `Stop-Process`-nek van egy `InputObject` bemeneti paramétere, ami
+  - `Process` típust fogad
+  - *Accept pipeline input: True*, tehát pipeline-ként képes fogadni
+- a `Get-Process` egy `Process` objektumot ad
+  
+```ps
 "notepad" | Stop-Process
+```
+
+Ez is működik, mert van egy `Name` nevű bemeneti paraméter, ami string-et tud fogadni pipeline-on keresztül.
+
+```ps
 $object = New-Object -TypeName PSObject
 Add-Member -InputObject $object -MemberType NoteProperty -Name Name -Value "notepad"
-$object
 $object | Stop-Process
-"BITS","WinRM" | Get-Service
-Get-Help Get-Service
-Get-Help Get-Service -Parameter Name
-Get-Help Start-Service -Parameter Name
-Get-Help Stop-Service -Parameter Name
-$object.Name = "WSearch"
-$object | Get-Service
-#=============================================
-#---- Modulok használata ----
-#=============================================
-Get-PSSnapin
-Get-PSSnapin -Registered
-Get-Module
-Get-Module -ListAvailable
-$env:PSModulePath
-Get-Command -Module NetTCPIP
-Import-Module -Name NetTCPIP
-Get-Module
-Get-NetIpAddress
-NetTCPIP\Get-NetIpAddress
-Import-Module -Name NetTCPIP -Force -Prefix x -PassThru
-Get-xNetIpAddress
-Remove-Module -Name NetTCPIP
-Get-Module
 ```
+
+Létrehozunk egy objektumot, amiben van egy `Name` property `notepad` értékkel. Ezt adjuk át a pipeline-nak. Ha a pipeline bemeneten nem `Process` vagy string van, akkor a cmdlet megnézi, hogy az objektumnak van-e `Name` property-je. Ha van, akkor annak értékét fogja venni. Ezt a működést jelzi a `Name` dokumentáció `Accept pipeline input? True (ByPropertyName)` sora.
+
+> A property értéke később is módosítható: `$object.Name = "notepad1"`.
+
+```ps
+"BITS","WinRM" | Get-Service
+```
+
+A cmdlet string-tömböt is tud fogadni.
