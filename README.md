@@ -1,10 +1,8 @@
-# Powershell alap tréning @ evosoft
-
 [**jegyzet**](./MFMSPS1_22022_3059_0_Csabradi_Attila_1645699201_PowerShell_alapok_tananyag_mfmsps1_v1.pdf)
 
-## Alapelemek
+# Alapelemek
 
-### `Get-Command`
+## `Get-Command`
 
 ```ps
 Get-Command	# minden parancs lekérése
@@ -20,7 +18,7 @@ Get-Command Microsoft.PowerShell.Management # ugyanaz, csak a paramétert elhagy
 Get-Command Get-Service -ShowCommandInfo # részletes infók a parancsról
 ```
 
-### `Get-Help`
+## `Get-Help`
 
 ```ps
 Get-Help # Help megjelenítése
@@ -37,7 +35,7 @@ Get-Help -Name about_* # about doksik (hosszabb tutorial-ok) listázása
 Get-Help -Name about_Aliases # alias-okról szóló about doksi megnyitása
 ```
 
-### Navigáció a fájlrendszerben
+## Navigáció a fájlrendszerben
 
 ```ps
 Push-Location # az aktuális path lementése
@@ -72,7 +70,7 @@ Show-Command -Name Get-ChildItem -PassThru # a Get-ChildItem paraméterei egy fe
 Get-ChildItem -Path C:\Windows\System32 -Include *.log -Recurse | Out-GridView # az eredmény egy külön ablakban jelenik meg
 ```
 
-### `Get-History`
+## `Get-History`
 
 ```ps
 Get-History # az aktuálisan session-ban használt parancsok
@@ -89,7 +87,7 @@ Add-History -InputObject (Import-Clixml -Path C:\PowerShell\Commands.xml) # hist
 Get-Content -Path (Get-PSReadlineOption).HistorySavePath # a history textfájl kiiratása
 ```
 
-### Execution Policy
+## Execution Policy
 
 [**execution policy dokumentáció**](https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_execution_policies?view=powershell-7.2)
 
@@ -118,27 +116,18 @@ New-Alias # új alias definiálása, enter leütése után adjuk meg az adatokat
 ## PSDrive
 
 ```ps
-Get-PSDrive
-Get-PSProvider
-Get-ChildItem -Path HKCU:
-dir HKCU:\System -r
-# Adjuk meg a következő paramétereket:
-# Name: PowerShell
-# PSProvider: FileSystem
-# Root: C:\Powershell
-New-PSDrive
-Get-PSDrive
-Set-Location -Path Powershell:
-Get-ChildItem
-Jegyzet .\chdir.txt
-Jegyzet Powershell:\chdir.txt
-Get-Content -Path Powershell:\chdir.txt
-Resolve-Path -Path Powershell:\chdir.txt
-Resolve-Path -Path Powershell:\chdir.txt | Format-List -Property *
-Jegyzet (Resolve-Path -Path Powershell:\chdir.txt).ProviderPath
-Set-Location C:
-Remove-PSDrive -Name Powershell
-Get-PSDrive
+Get-PSDrive # Fizikai és logikai meghajtók lekérése
+
+Get-PSProvider # drive erőforrások (pl. FileSystem, Registry) lekérése
+
+Get-ChildItem -Path HKCU: # HKCU (HKEY_CURRENT_USER) registry drive elemeinek lekérése
+
+New-PSDrive # új PSDrive felvétele
+
+Set-Location -Path Powershell: # ugrás a Powershell drive-ra
+
+Resolve-Path -Path Powershell:\chdir.txt | Format-List # drive path feloldása; a ProviderPath attribútum tartalmazza az abszolút path-t
+
 #=============================================
 #---- Metódusok és tulajdonságok ----
 #=============================================
