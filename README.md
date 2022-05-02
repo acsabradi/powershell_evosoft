@@ -47,21 +47,21 @@ Get-ChildItem # az aktuális path-ban lévő fájlok és mappák
 Get-ChildItem | Get-Member # típusnevek (mappa és/vagy fájl), valamint azok elemei (függvény, property...)
 ```
 
-> A `Get-ChildItem` egy objektumtömböt ad, viszont a `Get-Member` nem a tömbről ad infót, hanem a tömbben szereplő objektumokról.
+A `Get-ChildItem` egy objektumtömböt ad, viszont a `Get-Member` nem a tömbről ad infót, hanem a tömbben szereplő objektumokról.
 
 ```ps
 Get-Member -InputObject (Get-ChildItem)
 ```
 
-> Így már tényleg a tömbről kapunk infót.
+Így már tényleg a tömbről kapunk infót.
 
 ```ps
 Get-ChildItem -Path C:\Windows\System32 -Include *.log -Recurse
 ```
 
-> - `-Path`: Innen listázza az elemeket.
-> - `-Include *.log`: Csak erre a mintára illeszkedő elemeket adja vissza.
-> - `-Recurse`: Az almappákban is keres.
+- `-Path`: Innen listázza az elemeket.
+- `-Include *.log`: Csak erre a mintára illeszkedő elemeket adja vissza.
+- `-Recurse`: Az almappákban is keres.
 
 ```ps
 Get-ChildItem -Path C:\Windows\System32 -Include *.log -Recurse | Format-List # listába írja ki az elemeket -> minden property-nek új sor
@@ -82,8 +82,8 @@ Add-History -InputObject (Import-Clixml -Path C:\PowerShell\Commands.xml) # hist
 (Get-PSReadlineOption).HistorySavePath
 ```
 
-> - A `Get-PSReadlineOption` a módosítható konfigurációkat adja vissza.
-> - A `HistorySavePath` visszaadja annak a textfájlnak a path-ját ahová az összes használt parancs lementődik.
+- A `Get-PSReadlineOption` a módosítható konfigurációkat adja vissza.
+- A `HistorySavePath` visszaadja annak a textfájlnak a path-ját ahová az összes használt parancs lementődik.
 
 ```ps
 Get-Content -Path (Get-PSReadlineOption).HistorySavePath # a history textfájl kiiratása
@@ -97,7 +97,7 @@ Get-Content -Path (Get-PSReadlineOption).HistorySavePath # a history textfájl k
 Get-ExecutionPolicy -List
 ```
 
-> Visszaadja az egyes scope-okhoz rendelt policy-t. A scope-ok precedencia sorrendben vannak kiírva. Egy nagyobb precedenciával bíró scope policy-ja akkor is érvényre jut, ha egy kisebb precedenciájú scope szigorúbb policy-t ír elő.
+Visszaadja az egyes scope-okhoz rendelt policy-t. A scope-ok precedencia sorrendben vannak kiírva. Egy nagyobb precedenciával bíró scope policy-ja akkor is érvényre jut, ha egy kisebb precedenciájú scope szigorúbb policy-t ír elő.
 
 ```ps
 Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted # Unrestricted policy beállítása a CurrentUser scope-hoz
@@ -111,7 +111,7 @@ Az *alias*-ok PowerShell parancsok és cmdlet-ek alternatív, rövidebb nevei.
 Get-Alias # az összes alias lekérése
 Set-Location -Path Alias: # átmegyünk az Alias drive-ra, ott Get-ChildItem-el ugyanazt kapjuk, mint az előző paranccsal
 Get-Alias -Name C* # C-vel kezdődő alias-ok
-Get-Alias -Definition Clear-Host # Clear-Host cmdlet alias-a
+Get-Alias -Definition Clear-Host # Clear-Host cmdlet-hez rendelt alias
 New-Alias # új alias definiálása, enter leütése után adjuk meg az adatokat
 ```
 
