@@ -177,3 +177,39 @@ Létrehozunk egy objektumot, amiben van egy `Name` property `notepad` értékkel
 ```
 
 A cmdlet string-tömböt is tud fogadni.
+
+# Változók
+
+```ps
+$valtozo = "hello" # string változó deklarálás
+
+$valtozo.GetType().Name # -> String
+
+$valtozo = 5
+$valtozo.GetType() # -> Int32
+
+Set-StrictMode -Version Latest # Strict mode-ban hibát dob a script, ha egy best practice-t megsértünk
+
+$variable # nem létező változóra hivatkozás -> hiba
+
+$valtozo.tulajdonsag # nem létező property-re hivatkozás -> hiba
+
+Set-StrictMode -Off # Strict mode kikapcsolása
+
+$var = 1 # implicit típus megadás
+
+[System.Int32]$var = 1 # explicit típus megadás
+
+$var= "hello" # explicit típusnál nem adhatunk meg más típusú értéket
+
+$var = "123" # De ez működik, mert az "123" stringet implicit módon konvertálja integerré
+
+1+2.0+"3" # "Csak működjön valahogy" elv. Az értékek balról jobbra implicit módon konvertálódnak úgy, hogy a kifejezésnek legyen értelme. Itt a string operandusból double lesz -> eredmény: 6
+
+"1"+2 # Itt viszont balszélen string van, így a másik operandusból is string lesz, ezért a + operátor most összefűzi a stringeket -> eredmény: "12"
+
+$x ="123"
+$y = [int]$x # konvertálás értékátadás során
+
+($x -as [long]).GetType() # konvertálás másik szintaktikával
+```
