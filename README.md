@@ -1,5 +1,3 @@
-[**jegyzet**](./MFMSPS1_22022_3059_0_Csabradi_Attila_1645699201_PowerShell_alapok_tananyag_mfmsps1_v1.pdf)
-
 # Alapelemek
 
 ## `Get-Command`
@@ -140,7 +138,7 @@ Get-Item -Path C:\PowerShell\chdir.txt | Get-Member # Lekérjük az objektum ele
 
 (Get-Item -Path C:\PowerShell\chdir.txt).Length # Egy property lekérése
 
-# Integer esetén ugyanez áll fenn:
+# Integer esetében is kell zárójel:
 (5).Equals(5)
 ```
 
