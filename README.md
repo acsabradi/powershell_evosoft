@@ -153,7 +153,7 @@ Get-Process notepad | Stop-Process
 Ez a pipeline működik, mert:
 - a `Stop-Process`-nek van egy `InputObject` bemeneti paramétere, ami
   - `Process` típust fogad
-  - *Accept pipeline input: True*, tehát pipeline-ként képes fogadni
+  - *Accept pipeline input: True*, tehát pipeline-on keresztül is képes fogadni ezt a paramétert
 - a `Get-Process` egy `Process` objektumot ad
   
 ```ps
@@ -168,7 +168,7 @@ Add-Member -InputObject $object -MemberType NoteProperty -Name Name -Value "note
 $object | Stop-Process
 ```
 
-Létrehozunk egy objektumot, amiben van egy `Name` property `notepad` értékkel. Ezt adjuk át a pipeline-nak. Ha a pipeline bemeneten nem `Process` vagy string van, akkor a cmdlet megnézi, hogy az objektumnak van-e `Name` property-je. Ha van, akkor annak értékét fogja venni. Ezt a működést jelzi a `Name` dokumentáció `Accept pipeline input? True (ByPropertyName)` sora.
+Létrehozunk egy objektumot, amiben van egy `Name` property `notepad` értékkel. Ezt adjuk át a pipeline-nak. Ha a pipeline bemeneten nem `Process` vagy string van, akkor a cmdlet megnézi, hogy a bemeneti objektumnak van-e `Name` property-je. Ha van, akkor annak értékét fogja venni. Ezt a működést jelzi a `Name` dokumentáció `Accept pipeline input? True (ByPropertyName)` sora.
 
 > A property értéke később is módosítható: `$object.Name = "notepad1"`.
 
@@ -200,13 +200,13 @@ $var = 1 # implicit típus megadás
 
 [System.Int32]$var = 1 # explicit típus megadás
 
-$var= "hello" # explicit típusnál nem adhatunk meg más típusú értéket
+$var= "hello" # ez hibát dob, mert explicit típusnál nem adhatunk meg más típusú értéket
 
 $var = "123" # De ez működik, mert az "123" stringet implicit módon konvertálja integerré
 
-1+2.0+"3" # "Csak működjön valahogy" elv. Az értékek balról jobbra implicit módon konvertálódnak úgy, hogy a kifejezésnek legyen értelme. Itt a string operandusból double lesz -> eredmény: 6
+1+2.0+"3" # "Csak működjön valahogy" elv. Az értékek balról jobbra implicit módon konvertálódnak úgy, hogy a kifejezésnek legyen értelme. Itt a "3" string típusú operandusból double lesz -> eredmény: 6 (az eredmény integer típusú, mert a balszélső operandus is integer, így a 2.0 double típusú operandus is implicit módon konvertálódott integerré)
 
-"1"+2 # Itt viszont balszélen string van, így a másik operandusból is string lesz, ezért a + operátor most összefűzi a stringeket -> eredmény: "12"
+"1"+2 # Itt balszélen string van, így a másik operandusból is string lesz, ezért a + operátor most összefűzi a stringeket -> eredmény: "12"
 
 $x ="123"
 $y = [int]$x # konvertálás értékátadás során
