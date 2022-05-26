@@ -1,6 +1,20 @@
-# Alapelemek
+- [1. Alapelemek](#1-alapelemek)
+  - [1.1. `Get-Command`](#11-get-command)
+  - [1.2. `Get-Help`](#12-get-help)
+  - [1.3. Navigáció a fájlrendszerben](#13-navigáció-a-fájlrendszerben)
+  - [1.4. `Get-History`](#14-get-history)
+  - [1.5. Execution Policy](#15-execution-policy)
+  - [1.6. Alias-ok](#16-alias-ok)
+  - [1.7. PSDrive](#17-psdrive)
+  - [1.8. Metódusok használata](#18-metódusok-használata)
+  - [1.9. Pipeline használata](#19-pipeline-használata)
+- [2. Változók](#2-változók)
+- [3. Kiíratás, output](#3-kiíratás-output)
+- [4. Tömbök](#4-tömbök)
 
-## `Get-Command`
+# 1. Alapelemek
+
+## 1.1. `Get-Command`
 
 ```ps
 Get-Command	# minden parancs lekérése
@@ -16,7 +30,7 @@ Get-Command Microsoft.PowerShell.Management # ugyanaz, csak a paramétert elhagy
 Get-Command Get-Service -ShowCommandInfo # részletes infók a parancsról
 ```
 
-## `Get-Help`
+## 1.2. `Get-Help`
 
 ```ps
 Get-Help # Help megjelenítése
@@ -33,7 +47,7 @@ Get-Help -Name about_* # about doksik (hosszabb tutorial-ok) listázása
 Get-Help -Name about_Aliases # alias-okról szóló about doksi megnyitása
 ```
 
-## Navigáció a fájlrendszerben
+## 1.3. Navigáció a fájlrendszerben
 
 ```ps
 Push-Location # az aktuális path lementése
@@ -68,7 +82,7 @@ Show-Command -Name Get-ChildItem -PassThru # a Get-ChildItem paraméterei egy fe
 Get-ChildItem -Path C:\Windows\System32 -Include *.log -Recurse | Out-GridView # az eredmény egy külön ablakban jelenik meg
 ```
 
-## `Get-History`
+## 1.4. `Get-History`
 
 ```ps
 Get-History # az aktuálisan session-ban használt parancsok
@@ -85,7 +99,7 @@ Add-History -InputObject (Import-Clixml -Path C:\PowerShell\Commands.xml) # hist
 Get-Content -Path (Get-PSReadlineOption).HistorySavePath # a history textfájl kiiratása
 ```
 
-## Execution Policy
+## 1.5. Execution Policy
 
 [**execution policy dokumentáció**](https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_execution_policies?view=powershell-7.2)
 
@@ -99,7 +113,7 @@ Visszaadja az egyes scope-okhoz rendelt policy-t. A scope-ok precedencia sorrend
 Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted # Unrestricted policy beállítása a CurrentUser scope-hoz
 ```
 
-## Alias-ok
+## 1.6. Alias-ok
 
 Az *alias*-ok PowerShell parancsok és cmdlet-ek alternatív, rövidebb nevei.
 
@@ -111,7 +125,7 @@ Get-Alias -Definition Clear-Host # Clear-Host cmdlet-hez rendelt alias
 New-Alias # új alias definiálása, enter leütése után adjuk meg az adatokat
 ```
 
-## PSDrive
+## 1.7. PSDrive
 
 ```ps
 Get-PSDrive # Fizikai és logikai meghajtók lekérése
@@ -127,7 +141,7 @@ Set-Location -Path Powershell: # ugrás a Powershell drive-ra
 Resolve-Path -Path Powershell:\chdir.txt | Format-List # drive path feloldása; a ProviderPath attribútum tartalmazza az abszolút path-t
 ```
 
-## Metódusok használata
+## 1.8. Metódusok használata
 
 Ha cmdlet-el lekért objektum property-jét vagy függvényét akarjuk használni, akkor a kifejezést zárójelbe kell tenni.
 
@@ -142,7 +156,7 @@ Get-Item -Path C:\PowerShell\chdir.txt | Get-Member # Lekérjük az objektum ele
 (5).Equals(5)
 ```
 
-## Pipeline használata
+## 1.9. Pipeline használata
 
 A cmdlet dokumentáció alapján lehet eldönteni, hogy az adott parancsnak mit lehet átadni a pipeline-ban.
 
@@ -178,7 +192,7 @@ Létrehozunk egy objektumot, amiben van egy `Name` property `notepad` értékkel
 
 A cmdlet string-tömböt is tud fogadni.
 
-# Változók
+# 2. Változók
 
 ```ps
 $valtozo = "hello" # string változó deklarálás
@@ -214,7 +228,7 @@ $y = [int]$x # konvertálás értékátadás során
 ($x -as [long]).GetType() # konvertálás másik szintaktikával
 ```
 
-# Kiíratás, output
+# 3. Kiíratás, output
 
 ```ps
 $string = "Powershell"
@@ -232,7 +246,7 @@ Write-Host (1+2) # Az aritmetikai műveleteket zárójelbe kell tenni, ha azt ak
 &"Get-Date" # Stringben kapott cmdlet név lefut, ha & jelet teszünk a string elé
 ```
 
-# Tömbök
+# 4. Tömbök
 
 ```ps
 $array = @(1,2,3,4,5) # tömb deklarálás és inicializálás
