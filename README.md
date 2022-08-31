@@ -218,7 +218,7 @@ $var= "hello" # ez hibát dob, mert explicit típusnál nem adhatunk meg más t�
 
 $var = "123" # De ez működik, mert az "123" stringet implicit módon konvertálja integerré
 
-1+2.0+"3" # "Csak működjön valahogy" elv. Az értékek balról jobbra implicit módon konvertálódnak úgy, hogy az operátoroknak legyen valahogy értelme. A balszélső érték típusához fog igazodni a többi érték. Természetesen a PowerShell hibát fog dobni, ha olyan értéket adunk meg, amit nem lehet implicit módon konvertálni vagy parse-olni. Jelen esetben balszélen 1 integer érték van, így 2.0 double is integer lesz, valamint "3" string is integerré lesz parse-olva.
+1+2.0+"3" # "Csak működjön valahogy" elv. Az értékek balról jobbra implicit módon konvertálódnak úgy, hogy az operátoroknak legyen valahogy értelme. A balszélső érték típusához fog igazodni a többi érték. Természetesen a PowerShell hibát fog dobni, ha olyan értéket adunk meg, amit nem lehet implicit módon konvertálni vagy parse-olni. Jelen esetben balszélen 1 integer érték van, így 2.0 double is integer lesz, valamint "3" string is integerré lesz parse-olva. Így az eredmény 6.
 
 "1"+2 # Itt balszélen string van, így a másik operandusból is string lesz, ezért a + operátor most összefűzi a stringeket -> eredmény: "12"
 
