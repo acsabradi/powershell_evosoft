@@ -2,3 +2,4 @@
 [[Változók]]
 [[Konzolra írás]]
 [[Tömbök]]
+[[Matematikai operátorok]]
