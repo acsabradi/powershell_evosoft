@@ -18,7 +18,7 @@ $string = "Powershell"
 
 Write-Host (1+2) # Az aritmetikai műveleteket zárójelbe kell tenni, ha azt akarjuk, hogy kiértékelődjenek
 
-  
+Write-Output "teszt" | Get-Service # A Write-Output alternatíva az előbbi parancsnak. Annyi a különbség hogy ez pipeline-ban tovább tudja adni a kiírt értéket, míg az előbbi tudja formázni a szöveget (pl. háttér színe)
 
 "összeadás $(1+3)" # Stringben a $ jel is szükséges
 
