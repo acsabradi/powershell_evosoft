@@ -4,3 +4,5 @@
 [[Tömbök]]
 [[Matematikai operátorok]]
 [[Dátumok]]
+[[Operátorok]]
+[[Kimenet formázása]]
