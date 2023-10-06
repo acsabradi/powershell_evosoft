@@ -6,4 +6,5 @@
 [[Dátumok]]
 [[Operátorok]]
 [[Kimenet formázása]]
-[[Átirányítás]]
+[[Kimenet és naplózás átirányítás]]
+[[Regex és mintakeresés]]
