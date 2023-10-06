@@ -6,3 +6,4 @@
 [[Dátumok]]
 [[Operátorok]]
 [[Kimenet formázása]]
+[[Átirányítás]]
