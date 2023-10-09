@@ -1,0 +1,17 @@
+﻿#=============================================
+#---- A CmdletBinding ----
+#=============================================
+. .\Functions3.ps1
+$filetext = Get-Content -Path .\Functions3.ps1
+$filetext[0..19]
+CmdletBindingDemo1 -verb Get | Select-Object -First 10
+CmdletBindingDemo1 -dir C:\Windows | Select-Object -First 10
+CmdletBindingDemo1 -dir C:\Windows Get
+CmdletBindingDemo1 C:\Windows
+$filetext[20..39]
+CmdletBindingDemo2 C:\Windows | Select-Object -First 10
+$filetext[40..65]
+Get-Help CmdletBindingDemo1
+Get-Help CmdletBindingDemo3
+CmdletBindingDemo3 -verb Get -WhatIf
+CmdletBindingDemo3 -dir C:\Windows -Confirm

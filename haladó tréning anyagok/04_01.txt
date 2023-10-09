@@ -1,0 +1,108 @@
+﻿#=============================================
+#---- Kimeneti formátum módosítása ----
+#=============================================
+Get-ChildItem -Path C:\Windows| Format-Table -Property Name,@{Expression={if($_.psiscontainer){"Container"}else{"Child"}};Label="CustomType";width=10}
+Get-ChildItem -Path C:\Windows | Select-Object -Property Name, @{Name="CustomType";Expression={if ($_.Extension -eq ".log"){"Logfile"}else{"Regular file"}}}
+#=============================================
+#---- Alapértelmezett tulajdonságok ----
+#=============================================
+Get-Process
+Get-Process | Get-Member -View Base
+Get-Process | Get-Member -View Extended
+Get-Process | Get-Member -View All
+$typetxt = Get-Content -Path C:\Windows\System32\WindowsPowershell\v1.0\types.ps1xml
+$typetxt[520..623]
+Get-TypeData -TypeName System.Diagnostics.Process
+(Get-TypeData -TypeName System.Diagnostics.Process).Members
+$formattxt = Get-Content -Path C:\Windows\System32\WindowsPowershell\v1.0\DotNetTypes.format.ps1xml
+$formattxt[430..517]
+Get-FormatData -TypeName System.Diagnostics.Process
+Get-FormatData -TypeName System.Diagnostics.Process | Format-Custom
+#=============================================
+#---- Tulajdonságok bővítése ----
+#=============================================
+Get-ChildItem C:\Windows | Format-Table -Property Name, @{Label="Age";Expression={((Get-Date) - ($_.CreationTime)).Days}}
+Get-ChildItem C:\Windows | Select-Object -Property Name, @{Name="Age";Expression={((Get-Date) - ($_.CreationTime)).Days}}
+$files = Get-ChildItem -Path C:\Windows -File | Select-Object -Property Name, @{Name="Age";Expression={((Get-Date) - ($_.CreationTime)).Days}}
+$files | Get-Member
+$files.Age
+$f = Get-Item -Path C:\Windows\notepad.exe
+$f
+$f | Add-Member -MemberType ScriptProperty -Name FileSystemType -Value {if($this -is "System.IO.FileInfo"){"File"}else{"Directory"}}
+$f | Get-Member
+$f.FileSystemType
+$d = Get-Item -Path C:\Windows
+$d
+$d | Add-Member -MemberType ScriptProperty -Name FileSystemType -Value {if($this -is "System.IO.FileInfo"){"File"}else{"Directory"}}
+$d | Get-Member
+$d.FileSystemType
+#=============================================
+#---- Update-TypeData ----
+#=============================================
+Get-Help Update-TypeData
+Get-Content -Path .\typemember.ps1xml
+Update-TypeData -AppendPath .\typemember.ps1xml
+$dir = Get-ChildItem -Path C:\Windows 
+$dir | Select-Object -First 10
+$dir | Select-Object -First 10 | Format-List *
+$dir | Get-Member
+Get-TypeData -TypeName System.IO.FileInfo
+Get-TypeData -TypeName System.IO.DirectoryInfo
+(Get-TypeData -TypeName System.IO.FileInfo).Members
+(Get-TypeData -TypeName System.IO.DirectoryInfo).Members
+$tipus=(Get-TypeData -TypeName System.IO.DirectoryInfo)
+$tipus | Get-Member
+Remove-TypeData -TypeData $tipus
+(Get-TypeData -TypeName System.IO.DirectoryInfo).Members["Age"]
+Get-TypeData -TypeName System.IO.DirectoryInfo
+# Update-TypeData XML nelkul
+Get-Date | Get-Member
+$semesterscript={if ($this.Month -in @(1,2,3,4,5,6)){"H1"}else{"H2"}}
+Update-TypeData -TypeName "System.DateTime" -MemberType ScriptProperty -MemberName "Semester" -Value $semesterscript
+Get-Date | Get-Member
+Get-TypeData -TypeName System.DateTime
+(Get-Date).DateTime
+(Get-Date).Semester
+Update-TypeData -TypeName "System.DateTime" -DefaultDisplayPropertySet DateTime, DayOfYear, Semester
+Get-Date
+Get-Date | Format-List
+Get-Date | Format-Table
+#=============================================
+#---- Új típus létrehozása ----
+#=============================================
+# Szkript tartalmának felolvasása.
+Get-Content -Path .\contactclass.ps1
+# Dot sourcing.
+. .\contactclass.ps1
+$contact = New-Object contact "Gipsz Jakab", "Cég", "123-456"
+$contact
+$contact.GetType()
+$contact | Get-Member
+$contact = [contact]::new("Kőműves Kelemen", "Cég", "123-456")
+$contact
+Get-Content -Path .\calculatorclass.ps1
+. .\calculatorclass.ps1
+Add-Type -TypeDefinition $Source -Language CSharp
+$TestObject = New-Object Calculator 10, 5
+$TestObject
+$TestObject.Add()
+$TestObject.Subtract()
+$TestObject | Get-Member
+$TestObject | Get-Member -Static
+[Calculator]::Multiply(10,5)
+[Calculator]::Divide(10,5)
+#=============================================
+#---- Formázás beállítása ----
+#=============================================
+Get-Content -Path .\contact.type.ps1xml
+Update-TypeData -Path .\contact.type.ps1xml
+$contact
+$contact  | Get-Member
+Get-Content -Path .\contact.format.ps1xml
+Update-FormatData -AppendPath .\contact.format.ps1xml
+$contacts = @() 
+$contacts += New-Object contact "Gipsz Jakab", "Cég", "123-456"
+$contacts += New-Object contact "Kőműves Kelemen", "Cég", "234-567"
+$contacts += New-Object contact "Mézga Géza", "MásikCég", "345-678"
+$contacts += New-Object contact "Medve László", "MásikCég", "456-789"
+$contacts

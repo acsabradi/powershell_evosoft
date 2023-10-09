@@ -1,0 +1,27 @@
+﻿#=============================================
+#---- Függvénytár készítése ----
+#=============================================
+. .\Library.ps1
+$filetext = Get-Content -Path .\Library.ps1
+$filetext[12..59]
+$filetext[0..10]
+$filetext[61..117]
+$filetext[119..120]
+Get-Childitem -Path Function:
+Get-Shares localhost
+$dir = (Get-Item -Path ..\).FullName
+New-SmbShare -Path $dir -Name Demo
+Get-Shares localhost
+Get-ShareSizes localhost
+"Server","valami","localhost" | Get-Shares
+"Server","valami","localhost" | Get-ShareSizes
+Get-Content -Path .\servers.txt 
+Get-Content -Path .\servers.txt | Get-Shares
+Get-Content -Path .\servers.txt | Get-ShareSizes
+gs localhost
+gss localhost
+Get-Help Get-Shares -Full
+Get-Help Get-Shares -ShowWindow
+Get-Help Get-ShareSizes -Full
+Get-Help Get-ShareSizes -Showwindow
+Get-ShareSize ..\

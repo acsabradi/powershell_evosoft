@@ -1,0 +1,14 @@
+﻿#=============================================
+#---- Ellenörzőpontok használata ----
+#=============================================
+Get-Content -Path .\WorkFlow4.ps1
+.\WorkFlow4.ps1
+Get-ChildItem -Path ..\
+Get-Content -Path ..\BeforeCheckPoint.txt
+Get-Job
+Get-Job | Resume-Job
+Get-Job | Stop-Job
+Get-Job | Remove-Job
+Get-ChildItem -Path ..\
+Get-Content -Path ..\BeforeCheckPoint.txt
+Get-Content -Path ..\AfterCheckPoint.txt

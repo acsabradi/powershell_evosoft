@@ -1,0 +1,37 @@
+﻿#=============================================
+#---- PowerShell Charts ----
+#=============================================
+. .\Charts.ps1
+$file = Get-Content -Path .\Charts.ps1
+$file[0..13]
+$file[14..16]
+$file[17..22]
+$file[23..25]
+$file[26..28]
+$file[29..31]
+$file[32..33]
+$file[34..37]
+$file[38..42]
+$file[43..44]
+$file[45..47]
+$file[48..49]
+$file[50..55]
+$file[56..57]
+$file[58..64]
+$file[65..77]
+$file[78..89]
+$file[91..103]
+# Alapértelmezés
+Chart-Data 
+Chart-Data -Pie
+# Processek kiíratása
+$processes = Get-Process
+Get-ChartData $processes Name Ws
+$processes | Get-ChartData -key Name -value WS
+$Chartdata = $processes | Get-ChartData -key Name -value WS
+Chart-Data -Data $Chartdata -ChartTitle "Processes" -AxisXTitle "Processes" -AxisYTitle "Workingset"
+Chart-Data -Data $Chartdata -ChartTitle "Processes" -AxisXTitle "Processes" -AxisYTitle "Workingset" -Pie
+# Diskinfo kiíratása 
+$Chartdata = Get-DiskInfo | Get-ChartData -key Name -value Size
+Chart-Data -Data $Chartdata -ChartTitle "Disk Info" -AxisXTitle "Name" -AxisYTitle "Size"
+Chart-Data -Data $Chartdata -ChartTitle "Disk Info" -AxisXTitle "Name" -AxisYTitle "Size" -Pie

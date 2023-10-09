@@ -1,0 +1,10 @@
+﻿#=============================================
+#---- Adatkezelés PowerShellben ----
+#=============================================
+# Install-Module -Name PsExcel
+Import-Module -Name PsExcel
+Get-Command -Module PsExcel
+# Install Access Database Engine 2016 X64.
+# Install SQL Server Express.
+# Install SQL Server Management Studio.
+# Install AdventureWorks2019.

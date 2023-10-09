@@ -1,0 +1,32 @@
+$ButtonGetCommand_Click = {
+	if ($NounBox.Text -eq '')
+		{ $NounBox.Text = '*'}
+	
+	if ($VerbBox.Text -eq '')
+	{ $VerbBox.Text = '*' }
+	
+	$result = Get-Command -Noun $NounBox.Text -Verb $VerbBox.Text
+	foreach ($resultitem in $result)
+	{
+		
+		$item = $ResultList.Items.Add($resultitem.CommandType.ToString())
+		$item.SubItems.Add($resultitem.Name.ToString())
+		$item.SubItems.Add($resultitem.Version.ToString())
+		$item.SubItems.Add($resultitem.Source.ToString())
+	}
+
+}
+
+$ResultList_ItemChecked=[System.Windows.Forms.ItemCheckedEventHandler]{
+#Event Argument: $_ = [System.Windows.Forms.ItemCheckedEventArgs]
+	if ($_.Item.Checked)
+	{
+		$SaveFileDialog.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*"
+		$file= $($_.Item.SubItems[1].Text) + "_help.txt"
+		$SaveFileDialog.FileName = $file
+		$SaveFileDialog.ShowDialog()
+		$file = $SaveFileDialog.FileName
+		
+		Get-Help $($_.Item.SubItems[1].Text) | Out-File $file
+	}
+}

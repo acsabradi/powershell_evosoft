@@ -1,0 +1,80 @@
+#----------------------------------------------------------------------------------------------------------------------------
+# 1. Irjunk függvényt, mely megadja, hogy a Windows könytárban lévő alkönyvtárak mérete mekkora - könyvtáranként írassuk ki!
+#----------------------------------------------------------------------------------------------------------------------------
+
+#----------------------------------------------------------------------------------------------------------------------------------------
+# 2. Irjunk függvényt, mely egy megadott számról eldönti, hogy kilo-, mega vagy gigabájtban kell-e kiírni és úgy módosítja a formázását!
+#----------------------------------------------------------------------------------------------------------------------------------------
+
+#--------------------------------------------------------------------------------------------------------------------------------
+# 3. Irjunk függvényt, mely megadja, hogy hány találatunk van a lottón! Paraméterként kapja meg a lottószámokat és a tippjeinket!
+#--------------------------------------------------------------------------------------------------------------------------------
+
+#------------------------------------------------------------------------------------------------------------------------------------------------
+# 4. Vizsgáljuk meg, hogy egy megadott könyvtárban hány állományunk van! Ha több mint tíz, a három legrégebbit mozgassuk át egy másik könyvtárba!
+#------------------------------------------------------------------------------------------------------------------------------------------------
+
+#------------------------------------------------------------------------------------------------------------------------------------------------------
+# 5. Készítsünk az előző feladatunk alapján egy függvényt! A forrás és célkönyvtár, az állományok és a mozgatandó állományok száma paraméterből jöjjön!
+#------------------------------------------------------------------------------------------------------------------------------------------------------
+
+#---------------------------------------------------------------------------------------------------------
+# 6. Irassuk ki a biztonsági naplóba az elmúlt 24 órában bekerült meghiúsult bejelentkezési kisérleteket!
+#    A kiíratás egy szövegállományba történjen, melynek neve az adott időpont amikor fut a script!
+#    A szövegállományt egy olyan könyvtárban helyezzük el, melynek neve az aktuális dátum!
+#----------------------------------------------------------------------------------------------------------
+
+#--------------------------------------------------------------------------------------------
+# 7. Készítsünk az előző feladatunk alapján egy függvényt! A célkönyvtár paraméterből jöjjön!
+#--------------------------------------------------------------------------------------------
+
+#------------------------------------------------------------------------------------------------------------------------------------------------
+# 8. Irjunk függvényt, amely megadja a folyamatokat, és a hozzájuk tartozó futtatható állomány elérési útját! Oldjuk meg cmdlet-tel és WMI-vel is!
+#-------------------------------------------------------------------------------------------------------------------------------------------------
+
+#---------------------------------------------------------------------------------------------------------------------
+# 9. Irjunk függvényt, amely megadja a folyamatokat, és hogy ki indította azokat! Oldjuk meg cmdlet-tel és WMI-vel is!
+#---------------------------------------------------------------------------------------------------------------------
+
+#-----------------------------------------------------------------------------------------------------------------------
+# 10. Írjunk olyan scriptet, amely egy szövegállományból felolvasott szerverlista alapján kiírja a  szerverek státuszát!
+#     (Online-e a szerver, operációs rendszer, processzor és memóriaterhelés, uptime, rendszerlemezek szabad területe.)
+#     Az eredményt HTML formátumba írjuk ki!
+#-----------------------------------------------------------------------------------------------------------------------
+
+#----------------------------------------------------------------------------------------------------------------------------
+# 11. Az előző lottóellenőrző függvényünkből írjunk scriptet, mely automatikusan letölti a webről az ötös lottó nyerőszámait!
+#     A tippjeinket is egy fájlból töltsük be!
+#----------------------------------------------------------------------------------------------------------------------------
+
+#---------------------------------------------------------------------------------------------------------------------
+# 12. Írjunk három függvényt:
+#	- egyet a futó folyamatok naplózására,
+#	- egyet a futó szolgáltatások naplózására,
+#	- egyet a Rendszer napló utolsó hét napi hibaeseményeinek naplózására.
+#     Mindegyik függvény egy megadott könyvtárba hozzon létre egy szövegfájlt melynek nevében szerepelteti az aktuális 
+      dátumot/időt, majd írja bele az adatokat.
+#     A függvényeket mentsük egy függvénytár scriptbe!
+#     Egy új PowerShell folyamatot indítva, dot sourcing-gal hívjuk be a scriptbe mentett függvényeinket!
+#---------------------------------------------------------------------------------------------------------------------
+
+#------------------------------------------------------------------------------------------------------------------------
+# 13. Előző függvényeinket egészítsük ki:
+#	- paraméterekkel: a könyvtár megadására
+#	- paramétertulajdonságokkal: a paraméter nevesítetten adható meg, és kötelező,
+#	- függvénytulajdonságokkal: a függvény nem használ változó számú paraméterlistát, de támogatja a Commonparameters
+#				    lehetőséget,
+#	- paraméterellenőrzéssel,
+#	- súgóval.
+#------------------------------------------------------------------------------------------------------------------------
+
+#-----------------------------------------------------------------------
+# 14. Előző függvénytárunkból hozzunk létre egy modult CustomLogs néven!
+#     Készítsünk hozzá manifest fájlt!
+#-----------------------------------------------------------------------
+
+#------------------------------------------------------------------------------------------------------------
+# 15. A modulfüggvényeinket egészítsük ki távoli futtatási lehetőséggel!
+#     Hozzunk létre a függvényeinknek egy ComputerName paramétert, amivel megadható a távoli számítógép neve! 
+#------------------------------------------------------------------------------------------------------------
+

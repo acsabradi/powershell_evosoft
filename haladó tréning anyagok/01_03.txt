@@ -1,0 +1,27 @@
+﻿#=============================================
+#---- Paraméterkészletek ----
+#=============================================
+. .\Functions2.ps1
+$filetext = Get-Content -Path .\Functions2.ps1
+$filetext[74..105]
+Get-Area6
+Get-Area6 -terulet
+Get-Area6 -a 5 -b 3
+Get-Area6 -a 5 -b 3 -terulet
+$filetext[106..139]
+10 | Get-Area7 -b 8
+$filetext[140..163]
+Get-Area8 -r 10
+Get-Area8 -a 10
+Get-Area8 10
+$filetext[164..189]
+Get-Area9 -r 10
+Get-Area9 -a 10
+Get-Area9 10
+$filetext[190..221]
+Get-Area10 -a 10 -mode Square
+Get-Area10 -a 10 -mode Rectangle
+Get-Area10 -a 10 -b 20 -mode Square
+Get-Area10 -a 10 -b 20 -mode Rectangle
+Get-Area10 -a 10 -b 20 -mode Circle
+Get-Area10 -a 10 -b 20 -r 30 -mode Circle

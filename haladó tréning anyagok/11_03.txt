@@ -1,0 +1,13 @@
+﻿#=============================================
+#---- MS Access kezelése ----							
+#=============================================
+. .\Access.ps1
+$access = Get-Content -Path .\Access.ps1
+$access[0..7]
+$access[8..18]
+$access[19..42]
+$access[43..58]
+Create-Database
+Insert-Data
+Select-Data
+# Start-Process("https://mdbviewer.herokuapp.com/")

@@ -1,0 +1,11 @@
+﻿#===============================================
+# ---- DSC Configuration Manager beállítása ---- 
+#===============================================
+. .\Dsc3.ps1 
+Get-Content -Path.\Dsc3.ps1
+RegConfiguration -OutputPath ..\DSC -Ensure 'Present'
+Start-DscConfiguration -Path ..\DSC -Wait -Verbose -Force
+Get-ChildItem HKLM:\Software
+Get-DscLocalConfigurationManager
+Set-DscLocalConfigurationManager -Path ..\DSC  -Verbose
+Get-DscLocalConfigurationManager

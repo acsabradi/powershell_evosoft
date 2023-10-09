@@ -1,0 +1,87 @@
+﻿#=============================================
+#---- Objektum típusok ----
+#=============================================
+# .NET Objektum
+$dir = (Get-Item -Path ..\).FullName
+Get-Item -Path $dir
+Get-Item -Path $dir | Get-Member
+Get-Item -Path $dir | Format-List -Property *
+# WMI objektum
+Get-WmiObject Win32_Directory -Filter "Name='$( $dir.Replace("\","\\") )'" | Get-Member
+Get-WmiObject Win32_Directory -Filter "Name='$( $dir.Replace("\","\\") )'" | Format-List -Property *
+# COM objektum
+$Filesystem = New-Object -ComObject "Scripting.FilesystemObject"
+$Filesystem.GetFolder($dir)
+$Filesystem.GetFolder($dir) | Get-Member
+$Filesystem.GetFolder($dir) | Format-List -Property *
+#=============================================
+#---- Objektumtípusok lekérdezése ----
+#=============================================
+# .NET osztalyok
+[AppDomain]::CurrentDomain.GetAssemblies() | Foreach-Object { $_.GetTypes()}
+# WMI osztalyok
+Get-WmiObject -NameSpace "root/CIMV2" -List
+# COM osztalyok
+Get-ChildItem HKLM:\Software\Classes | ?{$_.PSChildName -match '^\w+\.\w+$' -and (Test-Path -Path "$($_.PSPath)\CLSID")} | Select-Object -ExpandProperty PSChildName
+#=============================================
+#---- Saját PS Objektum ----
+#=============================================
+$object = New-Object –TypeName PSObject
+$object | Add-Member –MemberType NoteProperty –Name Name –Value (Get-Item -Path $dir).FullName
+$object | Add-Member –MemberType NoteProperty –Name Mode –Value (Get-Item -Path $dir).Mode
+$object | Add-Member –MemberType NoteProperty –Name Compressed –Value (Get-WmiObject Win32_Directory -Filter "Name='$( $dir.Replace("\","\\") )'" ).Compressed
+$object | Add-Member –MemberType NoteProperty –Name Encrypted –Value  (Get-WmiObject Win32_Directory -Filter "Name='$( $dir.Replace("\","\\") )'" ).Encrypted
+$object | Add-Member –MemberType NoteProperty –Name Size –Value ($Filesystem.GetFolder($dir)).Size
+Write-Output $object
+$object | Get-Member
+# Új objektum egyszerűbben.
+$contact = @{Name = "user"; Company = "ceg"; Phone = "123-4567"} 
+$user = New-Object -TypeName PSObject -Property $contact
+$user
+$user.GetType()
+$user | Get-Member
+$user.Name = "Mézga Géza"
+$user.Company  = "Köbüki Kft."
+$user.Phone = "1234-567"
+$user
+#=============================================
+#---- Saját PS Objektum: Computer ----
+#=============================================
+$computer = New-Object PSObject
+$computer | Add-Member -MemberType NoteProperty -Name Name -Value $env:computername
+$computer
+$nics = Get-WmiObject -Class Win32_NetworkAdapterConfiguration
+$nics
+$computer | Format-List
+$computer | Add-Member -MemberType NoteProperty -Name NICs -Value $nics
+$computer | Format-List
+$computer.NICs
+$disks = Get-WMIObject Win32_LogicalDisk | Foreach-Object {Get-WmiObject -Query "Associators of {Win32_LogicalDisk.DeviceID='$($_.DeviceID)'} WHERE ResultRole=Antecedent"}
+$disks
+$computer | Add-Member -MemberType NoteProperty -Name Disks -Value $disks
+$computer | Format-List
+$computer.disks
+Get-NetIPInterface
+Get-NetIPAddress
+Get-NetIPAddress | Select-Object -Property InterfaceIndex, InterfaceAlias, IpAddress
+$ips = Get-NetIPAddress | Select-Object -Property InterfaceIndex, InterfaceAlias, IpAddress
+$ips
+$ifs=$ips | Foreach-Object {[ordered]@{Name=$_.Interfacealias; Ip=$_.IPAddress; ConnectionState=((Get-NetIpInterface -InterFaceIndex $_.InterFaceIndex).ConnectionState | Get-Unique)}}
+$ifs
+$computer | Add-Member -MemberType NoteProperty -Name IFs -Value $ifs
+$computer | Format-List
+$computer.Ifs
+#=============================================
+#---- Update-List ----
+#=============================================
+$object = New-Object PSObject
+$object | Add-Member -Name Nev -Value "Objektum" -MemberType noteproperty
+$properties = New-Object system.collections.arraylist
+$properties.Add("egy")
+$properties.Add("kettő")
+$object | Add-Member -Name Tulajdonsagok -Value $properties -MemberType noteproperty
+$object
+$object | Update-List -Property Tulajdonsagok -Add "három", "négy"
+$object | Update-List -Property Tulajdonsagok -Remove "kettő"
+$object | Update-List -Property Tulajdonsagok -Replace "öt", "hat"
+$object | Select-Object -ExpandProperty Tulajdonsagok		

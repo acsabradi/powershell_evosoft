@@ -1,0 +1,29 @@
+﻿#========================================
+# ---- Excel kezelése PowerShellből ----
+#========================================
+Import-Module -Name PSExcel
+Get-Command -Module PSExcel
+Get-Help Import-XLSX -ShowWindow
+$tanar = Import-Csv .\tanar.csv
+$tanar
+$tanar | Export-XLSX -Path .\Tanar.xlsx -Table -Autofit 
+# Start-Process("https://excelviewer.herokuapp.com/")
+$tanarImported = Import-XLSX -Path .\Tanar.xlsx
+$tanarImported
+$Excel = New-Excel -Path .\Tanar.xlsx
+$Excel
+$Excel | Get-Member
+$Workbook = $Excel | Get-Workbook
+$Workbook | Get-Member
+$WorkSheet = $Workbook | Get-Worksheet
+$WorkSheet | Get-Member
+$WorkSheet | Set-FreezePane -Row 2
+$Excel | Close-Excel -Save
+$Excel = New-Excel -Path .\Tanar.xlsx
+$Excel | Get-WorkSheet | Format-Cell -Header -Bold $True -Size 14
+$Excel = $Excel | Save-Excel -Passthru
+$Excel | Get-WorkSheet | Format-Cell -StartColumn 1 -EndColumn 1 -Autofit -Color DarkRed
+$Excel | Save-Excel -Close
+Search-CellValue -Path .\Tanar.xlsx { $_ -like 'Bp'}
+Get-ChildItem . -File | Export-XLSX -Path .\Files.xlsx -PivotRows Extension -PivotValues Length -ChartType Pie
+# Start-Process("https://excelviewer.herokuapp.com/")

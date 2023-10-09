@@ -1,0 +1,44 @@
+﻿#=============================================
+#---- Típusrövidítések ----
+#=============================================
+$tomb = [array] 1
+$tomb.GetType()
+$tomb
+$tomb+1
+$ip=[ipaddress] "192.168.1.1"
+$ip
+$ip.gettype().fullName
+$sb = [scriptblock] {$_.Name -eq "PowerShell"}
+$sb
+Get-Process | ? $sb
+$xml = [xml] (Get-Content -Path .\Products1.xml)
+$xml.GetType()
+$xml | Get-Member
+$handle=(Get-WMIObject "Win32_Process")[10].Handle
+$handle
+hostname
+$hostname=$env:ComputerName
+$hostname
+[wmi]"\\$hostname\root\Cimv2:Win32_Process.Handle=$handle"
+[wmiclass]"root\Cimv2:Win32_Process"
+([wmiclass]"root\Cimv2:Win32_Process").Create("C:\Windows\System32\notepad.exe")
+[wmisearcher]'SELECT * FROM Win32_Process WHERE Handlecount > 1000'
+$p=[WmiSearcher]'SELECT * FROM Win32_Process WHERE Handlecount > 1000'
+$p | Get-Member
+$p.Get()
+[psobject].Assembly.GetType("System.Management.Automation.TypeAccelerators")::get
+$xlr=[psobject].Assembly.GetType('System.Management.Automation.TypeAccelerators')
+$xlr | Get-Member -Static
+$xlr::Add('accelerators',$xlr)
+[accelerators]::get
+#=============================================
+#---- Statikus metódusok ----
+#=============================================
+[system.convert] | Get-Member -Name ToInt32 -MemberType Methods -Static
+[system.math] | Get-Member
+[system.math] | Get-Member -Name Pow
+[system.math] | Get-Member -Name Pow -MemberType Methods -Static
+[system.math] | Get-Member -MemberType Methods -Static
+[system.math] | Get-Member -MemberType Properties -Static
+[math]::pi
+[math]::Pow(3,2)

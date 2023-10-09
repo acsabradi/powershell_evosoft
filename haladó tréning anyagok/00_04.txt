@@ -1,0 +1,143 @@
+﻿#=============================================
+#---- Függvényparaméterek ----
+#=============================================
+. .\Functions1.ps1
+$filetext = Get-Content -Path .\Functions1.ps1
+$filetext[0..7]
+Get-Dirsize1
+$filetext[8..15]
+Get-Dirsize2 C:\Windows
+$filetext[16..23]
+Get-Dirsize3
+Get-Dirsize3 C:\Windows\System32
+$filetext[24..38]
+Get-Dirsize4
+Get-Dirsize4 -dir C:\Windows\System32
+Get-Dirsize4 C:\NonExistsDir
+#=============================================
+#--- Cím és érték szerinti paraméterátadás ---
+#=============================================
+$filetext[39..54]
+$filesum = 0
+Get-Dirsize5 -dir C:\Windows\System32 -result $filesum
+$filesum
+$filetext[55..70]
+Get-Dirsize6 -dir C:\Windows\System32 -result ([ref]$filesum)
+$filesum
+$filetext[71..87]
+Get-Dirsize7 -dir C:\Windows\System32 
+$result = Get-Dirsize7 -dir C:\Windows\System32 
+$result
+$result = Get-Dirsize7 -dir C:\NonExistsDir
+$result
+#=============================================
+#---- Tömbparaméterek ----
+#=============================================
+$filetext[88..95]
+$dir = Get-ChildItem C:\Windows -File
+$dir
+Get-Dirsize8 $dir
+$filetext[96..110]
+$dir = Get-ChildItem C:\Windows -File
+$result = Get-Dirsize9 -files $dir -num "2" 
+$result
+$result.GetType()
+$result = Get-Dirsize10 -files $dir -num "2" 
+$result
+$result.GetType()
+#=============================================
+#---- Függvény vs. Filter ----
+#=============================================
+function proba {$input.GetType()}
+1..10 | proba
+filter proba {$_.GetType()}
+1..10 | proba
+# Függvény.
+function proba1 { "Elemek:";"$input objektum";"Kiírás vége" }
+Get-Childitem -Path C:\Windows\SysWoW64 | proba1
+# Filter.
+filter proba2 { "Elem:";"$_ elem";"Kiírás vége" }
+Get-Childitem -Path C:\Windows\SysWoW64 | proba2
+# Ez is filter.
+function proba3 {BEGIN {"Elemek:"} PROCESS {"$_ elem"} END {"Kiírás vége"} }
+Get-Childitem -Path C:\Windows\SysWoW64 | proba3
+#=============================================
+#---- Scriptblock ----
+#=============================================
+1,2,3 | &{process {$_*2}}
+function Execute-ScriptBlock ([scriptblock] $a){Process {&($a)}}
+1,2,3 | Execute-ScriptBlock {$_*2}
+$script = {param($a) process {$_*$a}}
+1,2,3 | & $script 3
+#=============================================
+#---- ExecutionPolicy ----
+#=============================================
+Get-ExecutionPolicy -List
+Set-ExecutionPolicy -ExecutionPolicy Restricted -Scope Process -Force
+Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Scope CurrentUser -Force
+Get-ExecutionPolicy -List
+./WMIExplorer.ps1
+Set-ExecutionPolicy -ExecutionPolicy Undefined -Scope Process -Force
+Set-ExecutionPolicy -ExecutionPolicy Restricted -Scope CurrentUser -Force
+./WMIExplorer.ps1
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser -Force
+#=============================================
+#---- Scriptek ----
+#=============================================
+Get-Content -Path .\00_04_01.ps1
+.\00_04_01.ps1
+"./00_04_01.ps1"
+&"./00_04_01.ps1"
+. .\00_04_01.ps1
+$string
+Get-Content -Path .\00_04_02.ps1
+.\00_04_02.ps1
+.\00_04_02.ps1 1 0 1 "hello" (Get-ChildItem)
+.\00_04_02.ps1 -b 1 -a 0 1 "hello" (Get-ChildItem)
+$vissza = .\00_04_02.ps1 10 20 1 "hello" (Get-ChildItem)
+$vissza
+Get-Content -Path .\00_04_03.ps1
+.\00_04_03.ps1
+Get-Content -Path .\00_04_04.ps1
+.\00_04_04.ps1
+# Hatókör teszt 
+Get-Content -Path .\00_04_05.ps1
+.\00_04_05.ps1
+$var
+$global:var = "universal"
+$var = "demo script"
+.\00_04_05.ps1
+$var
+# Visszatérési érték 
+Get-Content -Path .\00_04_06.ps1
+.\00_04_06.ps1
+$hello = .\00_04_06.ps1
+$hello
+# Filterscript
+Get-Content -Path .\00_04_07.ps1
+Get-Childitem -Path C:\Windows\System32 -File | .\00_04_07.ps1
+#=============================================
+#---- Aláírt scriptek készítése ----
+#=============================================
+Get-Content -Path .\Sign.ps1
+.\Sign.ps1
+Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy AllSigned
+.\Sign.ps1
+New-SelfSignedCertificate -DNSName "TrainingServer" -CertStoreLocation Cert:\CurrentUser\My -Type CodeSigningCert -Subject "User" -FriendlyName Code
+Get-ChildItem -Path  Cert:\CurrentUser\My -CodeSigning
+$signcert = Get-ChildItem -Path Cert:\CurrentUser\My -CodeSigning | ? Subject -match "User"
+Set-AuthenticodeSignature -FilePath .\Sign.ps1 -Certificate $signcert
+Move-Item -Path $signcert.PSPath -Destination "Cert:\CurrentUser\Root"
+$signcert = Get-ChildItem -Path Cert:\CurrentUser\Root -CodeSigning | ? Subject -match "User"
+Set-AuthenticodeSignature -FilePath .\Sign.ps1 -Certificate $signcert
+Get-Content -Path .\Sign.ps1
+.\Sign.ps1
+Get-AuthenticodeSignature -FilePath .\Sign.ps1
+Get-AuthenticodeSignature -FilePath .\Sign.ps1 | Format-List -Property *
+# Önaláírt tanúsítvány másolása a TrustedPublisher tárolóba.
+.\Sign.ps1
+# File tartalmának megváltoztatása
+.\Sign.ps1
+Set-AuthenticodeSignature -FilePath .\Sign.ps1 -Certificate $signcert
+.\Sign.ps1
+Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted

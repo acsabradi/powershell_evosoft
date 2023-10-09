@@ -1,0 +1,132 @@
+﻿#=============================================
+#---- Változók ----
+#=============================================
+$valtozo = "hello"
+$valtozo
+$valtozo.GetType()
+$valtozo = 5
+$valtozo
+$valtozo.GetType()
+$valtozo + 3
+$valtozo = Get-ChildItem
+$valtozo
+$valtozo.GetType()
+Set-PSDebug -Strict
+$variable 
+$valtozo.tulajdonsag
+Set-PSDebug -Off
+$variable
+Set-StrictMode -Version Latest
+$variable 
+$valtozo.tulajdonsag
+Set-StrictMode -Off
+New-Variable -Name Pi -value 3.1415
+$Pi
+Clear-Variable -Name Pi
+$Pi
+Get-Variable -Name Pi
+Set-Variable -Name Pi -Value 3.1415
+$Pi
+Remove-Variable -Name Pi
+$Pi
+Get-Variable -Name Pi
+#=============================================
+#---- Változótípusok ----
+#=============================================
+$var = 1
+$var
+$var = "hello"
+$var
+[System.Int32]$var = 1
+$var = "hello"
+$var
+$var = "123"
+$var
+$var.GetType()
+1+2.0+"3"
+(1+2.0+"3").GetType().FullName
+1+"2"
+"1"+2
+$x ="123"
+$y = [int]$x
+$x
+$y
+$x.GetType()
+$y.GetType()
+($x -as [long]).GetType()
+#=============================================
+#---- Tömbök ----
+#=============================================
+$array = @(1,2,3,4,5)
+$tomb = 6..10
+$array
+$array.GetType()
+$tomb
+$tomb.GetType()
+[int32[]]$intarray = 100,200,300,400,500
+$intarray
+$intarray.GetType()
+$tomb = $array
+$array
+$tomb
+$array[0] = 0
+$array
+$tomb
+$tomb = New-Object -TypeName "int[]" -ArgumentList 10
+$tomb
+$tomb[0] = "szoveg"
+$array[2]
+$array[2..4]
+$array[1,3]
+$array[5]
+$array[-1]
+$array[-5]
+$urestomb = @()
+$urestomb = $urestomb+1
+$urestomb = $urestomb+2
+$urestomb = $urestomb+3
+$urestomb
+$urestomb.Count
+$urestomb.Length
+$urestomb.Rank
+$tabla = (1,2,3,4,5),("A","B","C","D","E")
+$tabla[0][0]
+$tabla[0][3]
+$tabla[1][0]
+$tabla[1][3]
+$tabla.Rank
+$tomb = New-Object -TypeName "int[,]" -ArgumentList 2,2
+$tomb[0,0] = 1
+$tomb[0,1] = 2
+$tomb[1,0] = 3
+$tomb[1,1] = 4
+$tomb.Rank
+$tomb
+$tomb = Get-ChildItem -Path ..\ 
+$tomb.GetType()
+$tomb | Get-Member
+$hash = @{ Név = "Gipsz Jakab"; Cím = "Budapest"; "E-mail"="jgipsz@domain.local"}
+$hash
+$hash["Cím"]
+$hash.Cím
+$hash | Get-Member
+$hash.Add("Név","Kőműves Kelemen")
+$hash.Név = "Kőműves Kelemen"
+$hash
+$contacts = New-Object system.collections.arraylist
+$contacts.Add([ordered]@{Név="Gipsz Jakab"; "E-mail"="jgipsz@domain.local"; Cím="Budapest"})
+$contacts.Add([ordered]@{Név="Kőműves Kelemen"; "E-mail"="kkelemen@domain.local"; Cím="Szeged"})
+$contacts
+$contacts[0]
+$contacts[1]
+$contacts[1].E-mail
+$contacts[1]."E-mail"
+#=============================================
+#---- Generic Hash ----
+#=============================================
+$dictionary = New-Object "Collections.Generic.Dictionary[string,int]"
+$dictionary.Val1 = 10
+$dictionary.Val2 = 20
+$dictionary
+# Hiba!
+$dictionary.Val3= "String"

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" ?> 
+<Types>
+  <Type>
+    <Name>Contact</Name>
+    <Members>
+      <ScriptProperty>
+        <Name>ContactEmail</Name>
+        <GetScriptBlock>
+          $($this.email())
+        </GetScriptBlock>
+      </ScriptProperty>
+    </Members>
+  </Type>
+</Types>

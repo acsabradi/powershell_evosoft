@@ -1,0 +1,31 @@
+﻿#=============================================
+#---- Universal Dashboard telepítése ----
+#=============================================
+Install-Module -Name UniversalDashboard.Community
+Start-UDDashboard -Port 10000
+Start-Process http://localhost:10000
+Get-UDDashboard
+Get-UDDashboard | Stop-UDDashboard
+Get-UDDashboard
+#=================================================
+# ---- Server Performance Dashboard telepitése ---
+#=================================================
+Install-Script -Name server-performance-dashboard
+Get-Content "C:\Program Files\WindowsPowerShell\Scripts\server-performance-dashboard.ps1"
+server-performance-dashboard.ps1
+Start-Process http://localhost:10000
+Get-UDDashboard | Stop-UDDashboard
+Get-Content .\server-performance-dashboard.ps1
+.\server-performance-dashboard.ps1
+Start-Process http://localhost:10000
+Get-UDDashboard | Stop-UDDashboard
+#=========================
+# ---- Saját dashboard ---
+#=========================
+Get-Command -Module UniversalDashboard.Community
+$files = Get-ChildItem -Path "C:\Program Files" -File -Recurse -ErrorAction Ignore | Sort-Object -Property Length -Descending | Select-Object -Property Name, LastWriteTime, @{Name = "Size"; Expression = {$_.Length/1Mb}} -First 10 
+$table = New-UDTable -Title "C:\Program Files" -Headers @("Name", "Last WriteTime ", "Size/Mb") -Endpoint { $files | Out-UDTableData -Property @("Name", "LastWriteTime", "Size")}
+$MyDashboard = New-UDDashboard -Title "Top 10 Largest Files" -Color '#34495E' -Content {$table}
+Start-UDDashboard -Port 10000 -Dashboard $MyDashboard -Name 'FileDashboard'
+Start-Process http://localhost:10000
+Get-UDDashboard | Stop-UDDashboard

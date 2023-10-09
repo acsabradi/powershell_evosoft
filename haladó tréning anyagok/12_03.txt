@@ -1,0 +1,22 @@
+﻿#=============================================
+#---- Presentation FrameWork használat ----
+#=============================================
+Get-Content -Path .\Xaml1.xml
+$file = Get-Content -Path .\Xaml1.ps1
+$file[0..5]
+$file[5..9]
+$file[9..14]
+$file[14..19]
+$file[19..33]
+$file[33..37]
+.\Xaml1.ps1
+Get-Content -Path .\Xaml2.xml
+$file = Get-Content -Path .\Xaml2.ps1
+$file[0..7]
+$file[7..13]
+$file[13..24]
+$file[24..31]
+$file[31..37]
+$file[37..53]
+$file[53..57]
+.\Xaml2.ps1

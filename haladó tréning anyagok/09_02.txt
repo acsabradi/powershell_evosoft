@@ -1,0 +1,13 @@
+﻿#============================
+# ---- DSC konfigurálása ----
+#============================
+. .\Dsc1.ps1 
+Get-Content -Path .\Dsc1.ps1 
+New-Item -Path ..\ -Name DSC -Type Directory
+RegConfiguration -OutputPath ..\DSC 
+Get-Content -Path ..\DSC\localhost.mof
+Get-DscLocalConfigurationManager
+Start-DscConfiguration -Path ..\DSC -Wait -Verbose -Force
+Get-ChildItem -Path HKLM:\Software
+Get-DscConfiguration
+Test-DscConfiguration -Detailed

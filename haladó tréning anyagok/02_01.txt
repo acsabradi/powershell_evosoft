@@ -1,0 +1,140 @@
+﻿#=============================================
+#---- WMI használat ----
+#============================================= 
+Get-WmiObject -NameSpace "root/CIMV2" -List
+Get-WmiObject -Class Win32_NetworkAdapter | Format-Table
+Get-WmiObject -Query 'SELECT * FROM Win32_Product WHERE Vendor="Microsoft Corporation"' | Format-Table
+Get-WmiObject -Class Win32_Product -Filter 'Vendor="Microsoft Corporation"' | Format-Table
+(Get-WmiObject -Class Win32_Product -Filter 'Vendor="Microsoft Corporation"').GetType() | Format-Table
+(Get-WmiObject -Class Win32_Product -Filter 'Vendor="Microsoft Corporation"')[0].GetType() | Format-Table
+(Get-WmiObject -Class Win32_Product -Filter 'Vendor="Microsoft Corporation"')[0] | Get-Member | Format-Table
+Get-WmiObject -Class Win32_Product -Filter 'Vendor="Microsoft Corporation"' | Format-Table -Property Name
+Get-WmiObject -Class Win32_Service -Credential DOMAIN\Administrator -Computer MasikGep
+Get-WmiObject -Class Win32_Share
+Get-WmiObject -Class Win32_Share | Get-Member
+$share = [wmiclass] "Win32_Share"
+$share | Get-Member
+New-Item -Path ..\ -Name Share -ItemType Directory
+$dir = (Get-Item ..\Share).FullName
+$share.Create($dir,"Temp",0)
+Get-WmiObject -Class Win32_Share
+[wmi]"\\$($env:ComputerName)\root\cimv2:Win32_Share.Name='Temp'"
+(Get-WmiObject -Class Win32_Share -Filter 'Name="Temp"').Delete()
+Get-WmiObject -Class Win32_Share
+# WMIExplorer indítása
+# Root\CIMv2\Win32_Share Instances vizsgálata
+Get-WmiObject -Class "Win32_ComputerSystem" -NameSpace "root\CIMV2"
+(Get-WmiObject -Class "Win32_ComputerSystem" -Namespace "root\CIMV2").Name
+Get-WmiObject -Class "Win32_BIOS" -NameSpace "root\CIMV2"
+(Get-WmiObject -Class "Win32_BIOS" -NameSpace "root\CIMV2").Manufacturer
+Get-WmiObject -Class "Win32_Processor" -NameSpace "root\CIMV2"
+(Get-WmiObject -Class "Win32_Processor" -NameSpace "root\CIMV2").Name
+$disk = Get-WmiObject -Class "Win32_LogicalDisk" -NameSpace "root\CIMV2" -Filter 'Caption="C:"'
+$disk
+$disk.FreeSpace/1mb
+#=============================================
+#---- CIM vs. WMI ----
+#=============================================
+# WinRM bekapcsolása 
+# Enable-PSRemoting –SkipNetworkProfileCheck -Force
+Get-WMIObject –Namespace root –List -Recurse | Select-Object -Unique __NAMESPACE
+Get-WmiObject -Namespace root\cimv2 –List | Sort-Object -Property Name
+Get-CimClass –Namespace root\CIMv2 | Sort-Object -Property CimClassName
+Get-Command -Module CimCmdlets | Sort-Object -Property Noun
+Get-WmiObject –ClassName Win32_Service | Get-Member
+Get-CimInstance –ClassName Win32_Service | Get-Member
+Get-WmiObject -Class Win32_Service | Get-Member | Where-Object Name -eq 'Change' | Format-List -Property Name,Definition
+Get-CimInstance -Class Win32_Service | Get-Member | Where-Object Name -eq 'Change' | Format-List -Property Name,Definition
+Get-CimClass –Class Win32_Service
+(Get-CimClass –Class Win32_Service).CimClassMethods
+(Get-CimClass –Class Win32_Service).CimClassMethods | Where-Object {$_.Name -eq "Change"}
+((Get-CimClass –Class Win32_Service).CimClassMethods | Where-Object {$_.Name -eq "Change"}).Parameters
+$disk = Get-WmiObject –Class Win32_LogicalDisk –Filter "DriveType=3“
+$disk
+$disk = Get-CimInstance –ClassName Win32_LogicalDisk –Filter "DriveType=3"
+$disk
+$disk = Get-WmiObject –Query "SELECT * FROM Win32_LogicalDisk WHERE DriveType = 3"
+$disk
+$disk = Get-CimInstance –Query "SELECT * FROM Win32_LogicalDisk WHERE DriveType = 3"
+$disk
+$s = New-CimSession –ComputerName localhost
+Get-WmiObject -Class Win32_OperatingSystem -Computer localhost
+Get-CimInstance –CimSession $s –ClassName Win32_OperatingSystem
+$s | Remove-CimSession
+Start-Process -FilePath notepad
+Get-WmiObject –Class Win32_Process –Filter "Name='notepad.exe'" | Invoke-WmiMethod –Name Terminate
+Start-Process -FilePath notepad
+Invoke-CimMethod -Query 'SELECT * FROM Win32_Process WHERE name LIKE "notepad%"' -MethodName "Terminate"
+#=============================================
+#---- WMI WHERE ----
+#=============================================
+$query = "SELECT * FROM Win32_Service"
+Get-WMIObject -Query $query | Format-Table
+$query = "SELECT * FROM Win32_Service WHERE Name='AudioSrv'"
+Get-WMIObject -Query $query | Format-Table
+# LIKE
+$query = "SELECT Name, State FROM Win32_Service WHERE Name LIKE 'AudioSrv'"
+Get-WMIObject -Query $query
+$query = "SELECT * FROM Win32_Service WHERE Name LIKE '%Audio%'"
+Get-WMIObject -Query $query | Format-Table
+$query = "SELECT * FROM Win32_Service WHERE Name LIKE '[af]%'"
+Get-WMIObject -Query $query | Format-Table
+$query = "SELECT * FROM Win32_Service WHERE Name LIKE '[a-f]%'"
+Get-WMIObject -Query $query | Format-Table
+$query = "SELECT * FROM Win32_Service WHERE Name LIKE '[^afgh]%'"
+Get-WMIObject -Query $query | Format-Table
+$query = "SELECT * FROM Win32_Service WHERE Name LIKE '%a_diosrv%'"
+Get-WMIObject -Query $query | Format-Table
+# Logikai operátorok
+$query = "SELECT * FROM Win32_Service WHERE State='Running' AND StartMode='Manual'"
+Get-WMIObject -Query $query | Format-Table
+$query = "SELECT * FROM Win32_Service WHERE (State='Running' AND StartMode='Manual') AND (Name LIKE '[af]%')"
+Get-WMIObject -Query $query | Format-Table
+$query = "SELECT * FROM Win32_Service WHERE State='Stopped' OR State='Paused'"
+Get-WMIObject -Query $query | Format-Table
+$query = "SELECT * FROM Win32_Service WHERE (State='Running' OR State='Paused') AND Name LIKE '[af]%'"
+Get-WMIObject -Query $query | Format-Table
+$query = "SELECT * FROM Win32_Service WHERE NOT (State='Running')"
+Get-WMIObject -Query $query | Format-Table
+$query = "SELECT * FROM Win32_Service WHERE State<>'Running'"
+Get-WMIObject -Query $query | Format-Table
+$query = "SELECT * FROM Win32_Service WHERE State!='Running'"
+Get-WMIObject -Query $query | Format-Table
+# NULL kezelés
+$query = "SELECT * FROM Win32_LogicalDisk WHERE FileSystem IS NULL"
+Get-WMIObject -Query $query | Format-Table
+$query = "SELECT * FROM Win32_LogicalDisk WHERE FileSystem IS NOT NULL"
+Get-WMIObject -Query $query | Format-Table
+#=============================================
+#---- WMI ASSOCIATORS ----
+#=============================================
+# Osztálykapcsolatok
+$query = "ASSOCIATORS OF {Win32_Service.Name='NetLogon'} WHERE ClassDefsOnly"
+Get-WMIObject -Query $query | Format-Table
+# Objektumkapcsolatok
+$query = "ASSOCIATORS OF {Win32_Service.Name='NetLogon'}"
+Get-WMIObject -Query $query | Format-Table
+$query = "ASSOCIATORS OF {Win32_Service.Name='NetLogon'} WHERE AssocClass=Win32_DependentService"
+Get-WMIObject -Query $query | Format-Table
+$query = "ASSOCIATORS OF {Win32_Service.Name='LanmanWorkstation'} WHERE ResultRole=Dependent"
+Get-WMIObject -Query $query | Format-Table
+Get-Service -Name "LanmanWorkstation" -DependentServices
+$query = "ASSOCIATORS OF {Win32_Service.Name='NetLogon'} WHERE ResultRole=Antecedent"
+Get-WMIObject -Query $query | Format-Table
+Get-Service -Name "Netlogon" -RequiredServices
+#=============================================
+#---- WMI SCHEMA ----
+#=============================================
+$query = "SELECT * FROM meta_class WHERE __this ISA 'Win32_Process'"
+Get-WMIObject -Query $query | Format-List
+$mof = ([wmiclass]"Win32_CurrentTime").GetText("mof") -replace "\;","`r"
+$mof
+Get-CimInstance Win32_Service -Filter 'Name Like "app%"' | Export-CliXml ..\Wmi.xml
+$wmixml = Import-CliXml ..\Wmi.xml
+$wmixml[0].pstypenames
+# ---- Metódusok felderítése ----
+$proc = Get-CimClass Win32_Process
+$proc.CimClassMethods 
+$proc = Get-CimInstance Win32_Process -Filter "Name Like 'PowerShell%'"
+$proc | Invoke-CimMethod -MethodName GetOwner 
+Invoke-CimMethod -ClassName Win32_Process -MethodName Create -Arguments @{CommandLine="calc.exe"}

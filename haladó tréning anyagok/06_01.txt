@@ -1,0 +1,87 @@
+﻿#=============================================
+#---- Megszakító és nem megszakító hibák ----
+#=============================================
+1+2; Write-Error "Hiba!"; 2-1
+1+2; Throw "Hiba!"; 2-1
+$ErrorActionPreference = "SilentlyContinue"
+1+2; Write-Error "Hiba!"; 2-1
+$ErrorActionPreference = "Continue"
+1+2; Remove-Item -Path ..\nincs.txt; 2-1
+1+2; Remove-Item -Path ..\nincs.txt -Debug; 2-1
+1+2; Remove-Item -Path ..\nincs.txt -Debug -ErrorVariable hiba; 2-1
+$hiba
+1+2; Remove-Item -Path ..\nincs.txt -Debug -ErrorVariable hiba -ErrorAction Stop; 2-1
+$hiba
+$Error[0]
+$Error[1]
+$Error[2]
+$MaximumErrorCount
+$Error[1] | Get-Member
+$Error[1].CategoryInfo
+Write-Error -Message "hello"
+Write-Warning -Message "hello"
+Get-Content .\Debug.ps1
+.\Debug.ps1
+$VerbosePreference = "Continue"
+.\Debug.ps1
+$VerbosePreference = "SilentlyContinue"
+.\Debug.ps1
+# Lépésenkénti futtatás (F11) PGUI Editorban vagy ISE-ben 
+#=============================================
+#---- A Set-PSDebug cmdlet ----
+#=============================================
+Set-PSDebug -strict 
+$var1=1 
+$var1
+$var2
+$var1.property
+Set-PSDebug -Off
+$var2
+# Set-StrictMode
+Set-StrictMode -Version 1
+$var2
+$var1.property
+Set-StrictMode -Version 2
+$var2
+$var1.property
+# Trace
+Set-PSDebug -Trace 1
+.\Debug.ps1
+Set-PSDebug -Trace 2
+.\Debug.ps1
+Set-PSDebug -Off
+#=============================================
+#---- A Set-PSBreakPoint cmdlet ----
+#=============================================
+$var = 10
+Set-PSBreakpoint -Variable var
+$var
+$var = 7
+$b = Set-PSBreakpoint -Variable var -Mode ReadWrite
+$b
+$b | Get-Member
+$b | Format-List *
+$var
+Remove-PSBreakpoint $b
+Get-PSBreakpoint
+Get-PSBreakpoint | Remove-PSBreakpoint
+Get-Content -Path .\Debug.ps1
+.\Debug.ps1
+Set-PSBreakpoint -Script .\Debug.ps1 -Line 4
+.\Debug.ps1
+Get-PSBreakpoint | Remove-PSBreakpoint
+#=============================================
+#---- A Wait-Debugger cmdlet ----
+#=============================================
+function Wait{$a=0; while($a++ -lt 5){Start-Sleep -Seconds 1; Write-Host $a}}
+Wait
+#  Control + Break használata.
+Wait
+function Wait{$a=0; while($a++ -lt 5){Start-Sleep -Seconds 1; Write-Host $a; Wait-Debugger}}
+Wait
+Get-ChildItem | Select-Object -First 5 | % {($a=$_);Wait-Debugger}
+Start-Job -ScriptBlock {$a=0; while($a++ -lt 5){Start-Sleep -Seconds 1; Write-Host $a; Wait-Debugger}} -Name TimeJob
+Debug-Job -Name Timejob
+Get-Job
+Receive-Job -Name Timejob
+Get-Job | Remove-Job

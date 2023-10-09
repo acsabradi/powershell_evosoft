@@ -1,0 +1,115 @@
+﻿#=============================================
+#---- WMI EVENTS ----
+#=============================================
+Get-Command -Noun *Event
+Register-WmiEvent Win32_Process
+Get-WMIObject -Query "SELECT * FROM meta_class WHERE (__This ISA '__Event') AND (__Class like 'win32%')"
+# _instance Events
+$query = "SELECT * FROM __instanceCreationEvent WITHIN 10 WHERE TargetInstance ISA 'Win32_Process'"
+Register-WMIEvent -Query $query -Action {Write-Host "Új folyamat jött létre!"}
+Get-EventSubscriber
+Start-Process -FilePath notepad.exe
+$wmievent = Get-EventSubscriber
+Unregister-Event -SubscriptionId  $wmievent.SubscriptionId
+Get-EventSubscriber
+# StartTrace/StopTrace
+# Process Start
+$WMI = @{Query = "SELECT * FROM Win32_ProcessStartTrace";Action = {Write-Host ("Folyamat: {0}({1}) elindult, ekkor: {2}" -f $event.SourceEventArgs.NewEvent.TargetInstance.Name,$event.SourceEventArgs.NewEvent.TargetInstance.ProcessID,[datetime]::FromFileTime($event.SourceEventArgs.NewEvent.TIME_CREATED)) -Back Black -Fore Green};}
+$wmievent1 = Register-WMIEvent @WMI
+Start-Process -FilePath notepad.exe
+# Process End
+$WMI = @{Query = "SELECT * FROM Win32_ProcessStopTrace";Action = {Write-Host ("Folyamat: {0}({1}) leállt, ekkor: {2}" -f $event.SourceEventArgs.NewEvent.TargetInstance.Name,$event.SourceEventArgs.NewEvent.TargetInstance.ProcessID,[datetime]::FromFileTime($event.SourceEventArgs.NewEvent.TIME_CREATED)) -Back Black -Fore Yellow};}
+$wmievent2 = Register-WMIEvent @WMI
+Stop-Process -Name notepad
+$wmievent1
+$wmievent2
+Get-Job
+Unregister-Event $wmievent1.Name
+Unregister-Event $wmievent2.Name
+Get-EventSubscriber
+# Permanent WMI Event Subscribe
+# Event Filters listázása
+Get-WMIObject -Namespace root\Subscription -Class __EventFilter
+# Event Consumers listázása
+Get-WMIObject -Namespace root\Subscription -Class __EventConsumer
+# Event Bindings listázása
+Get-WMIObject -Namespace root\Subscription -Class __FilterToConsumerBinding
+# Filter beállítás
+$instanceFilter = ([wmiclass]"\\.\root\subscription:__EventFilter").CreateInstance()
+$instanceFilter.QueryLanguage = "WQL"
+$instanceFilter.Query = "SELECT * FROM __instanceModificationEvent WITHIN 5 WHERE targetInstance ISA 'Win32_Service'"
+$instanceFilter.Name = "ServiceFilter"
+$instanceFilter.EventNamespace = 'root\cimv2'
+$instancefilter | Get-Member -View All
+$result = $instanceFilter.Put()
+$newFilter = $result.Path
+# Akció beállítása
+$dir = (Get-Item -Path ..\).FullName
+$instanceConsumer = ([wmiclass]"\\.\root\subscription:LogFileEventConsumer").CreateInstance()
+$instanceConsumer.Name = 'ServiceConsumer'
+$instanceConsumer.Filename = "$dir\Service.log"
+$instanceConsumer.Text = 'Változás a szolgáltatásban: %TargetInstance.DisplayName%'
+$result = $instanceConsumer.Put()
+$newConsumer = $result.Path
+# Összekötés
+$instanceBinding = ([wmiclass]"\\.\root\subscription:__FilterToConsumerBinding").CreateInstance()
+$instanceBinding.Filter = $newFilter
+$instanceBinding.Consumer = $newConsumer
+$result = $instanceBinding.Put()
+$newBinding = $result.Path
+# Próba
+Stop-Service -Name WSearch
+Start-Service -Name WSearch
+Get-Content -Path $dir\Service.log
+# Takarítás
+([wmi]$newFilter).Delete()
+([wmi]$newConsumer).Delete()
+([wmi]$newBinding).Delete()
+Get-Job
+Get-Job | Remove-Job
+Get-Job
+#=============================================
+#---- PowerShell események figyelése ----
+#=============================================
+New-Event PSEvent
+Register-EngineEvent -SourceIdentifier PSEvent -Action {Write-Host "Az esemény kiváltódott!"}
+New-Event PSEvent
+Get-EventSubscriber
+Get-EventSubscriber | Unregister-Event
+Get-EventSubscriber
+Get-Job
+Get-Job | Remove-Job
+Get-Job
+#=============================================
+#---- .NET események figyelése ----
+#=============================================
+# ---- Timer ----
+$Timer = New-Object Timers.Timer
+$Timer.Interval = 15000
+$objectEventArgs = @{InputObject = $Timer;EventName = 'Elapsed';SourceIdentifier = 'Timer';Action = {Write-Host "Hello World!"}}
+Register-ObjectEvent @objectEventArgs
+$Timer.Enabled = $True
+Get-EventSubscriber
+$Timer.Enabled = $False
+Get-EventSubscriber | Unregister-Event
+Get-EventSubscriber
+Get-Job
+Get-Job | Remove-Job
+Get-Job
+# ---- FileSystemWatcher ----
+$figyel = New-Object System.IO.FileSystemWatcher
+Get-Member -InputObject $figyel -MemberType event, property
+$figyel | Format-List
+[System.Enum]::GetNames([System.Io.Notifyfilters])
+$figyel.NotifyFilter = "FileName"
+$figyel.IncludeSubdirectories = $false
+$figyel.Path = $dir
+$figyel | Get-Member -MemberType event 
+Register-ObjectEvent -InputObject $figyel -EventName Deleted -Action {$event.timegenerated, $eventargs | Out-Host}
+Get-EventSubscriber
+Remove-Item -Path ..\Szamok.txt -Force
+Get-EventSubscriber | Unregister-Event
+Get-EventSubscriber
+Get-Job
+Get-Job | Remove-Job
+Get-Job
