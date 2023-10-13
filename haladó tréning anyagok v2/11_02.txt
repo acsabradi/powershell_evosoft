@@ -1,0 +1,18 @@
+﻿#=============================================
+#---- DataGrid használat ----
+#=============================================
+$gridfile = Get-Content -Path .\GetServiceGrid.ps1
+$gridfile[0..13]
+$gridfile[13..20]
+$gridfile[20..27]
+$gridfile[27..40]
+$gridfile[69..80]
+$gridfile[80..100]
+$gridfile[100..119]
+$gridfile[119..138]
+$gridfile[138..157]
+$gridfile[157..173]
+$gridfile[40..69]
+$gridfile[173..183]
+$gridfile[183..189]
+.\GetServiceGrid.ps1

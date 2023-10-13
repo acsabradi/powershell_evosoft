@@ -1,0 +1,132 @@
+﻿#=============================================
+#---- PsObject ----
+#=============================================
+Get-Process powershell
+Get-Process powershell | Get-Member
+Get-Process powershell | Get-Member -View Base
+Get-Help Get-Member
+Get-Help Get-Member -Detailed
+Get-Help Get-Member -Full
+Get-Help Get-Member -Parameter View
+Get-Process powershell | Get-Member -View Adapted
+Get-Process powershell | Get-Member -View Extended
+Get-Process powershell | Get-Member -View All
+#=============================================
+#---- Metódushasználat ----
+#=============================================
+5
+5 | Get-Member
+(5).Equals(5)
+(5).Equals(3)
+((5) | Get-Member -Name Equals).Definition
+5 | Get-Member | Format-List -Property Definition
+Get-Item -Path C:\Powershell | Get-Member
+(Get-Item -Path C:\Powershell).GetAccessControl()
+Start-Process -FilePath notepad
+Get-Process -Name notepad
+Get-Process -Name notepad | Get-Member
+(Get-Process -Name notepad).Kill()
+#=============================================
+#---- Kifejezés és parancsmód ----
+#=============================================
+1+2
+Write-Host 1+2
+Write-Host (1+2)
+Get-Date
+"Get-Date"
+&"Get-Date"
+(Get-Date).Year + 1
+Get-Command
+Get-Command.Count  
+(Get-Command).Count
+#=============================================
+#---- PipeLine ----
+#=============================================
+Start-Process -FilePath notepad
+Get-Process -Name notepad
+$np = Get-Process -Name notepad
+$np
+Stop-Process -InputObject $np
+Start-Process notepad
+Stop-Process notepad
+Get-Process notepad | Stop-Process
+Get-Help Stop-Process
+Get-Help Stop-Process -Parameter InputObject
+Get-Help Stop-Process -Parameter Name
+Start-Process -FilePath notepad
+"notepad" | Stop-Process
+$object = New-Object -TypeName PSObject
+Add-Member -InputObject $object -MemberType NoteProperty -Name Name -Value "notepad"
+$object
+$object | Stop-Process
+"BITS","WinRM" | Get-Service
+Get-Help Get-Service
+Get-Help Get-Service -Parameter Name
+Get-Help Start-Service -Parameter Name
+Get-Help Stop-Service -Parameter Name
+$object.Name = "WSearch"
+$object | Get-Service
+#=============================================
+#---- Átirányítás ----
+#=============================================
+Get-Help about_Redirection 
+Get-Process | Format-Table -Property Id > C:\PowerShell\szamok.txt
+Get-Content -Path C:\PowerShell\szamok.txt
+Write-Output "PowerShell" >> C:\PowerShell\szamok.txt
+Get-Content -Path C:\PowerShell\szamok.txt
+Get-ChildItem -Path C:\Windows\System32 -Include *.log -Recurse
+Get-ChildItem -Path C:\Windows\System32 -Include *.log -Recurse > C:\PowerShell\log.txt
+Get-ChildItem -Path C:\Windows\System32 -Include *.log -Recurse 2> C:\PowerShell\hiba.txt
+Get-ChildItem -Path C:\Windows\System32 -Include *.log -Recurse 2>&1 > C:\PowerShell\loghiba.txt
+Write-Error -Message "Hiba" 2>> C:\PowerShell\hiba.txt
+Write-Warning -Message "Figyelmeztetés" 3>> C:\PowerShell\hiba.txt
+Write-Verbose -Message "Kiegészító információk" -Verbose 4>> C:\PowerShell\hiba.txt
+Write-Debug -Message "Hibakeresés" -Debug 5>> C:\PowerShell\hiba.txt
+Write-Information -Msg "Információ" -InformationAction Continue 6>> C:\PowerShell\hiba.txt
+$nincs = Remove-Item -Path C:\PowerShell\nincs.txt
+$nincs
+$nincs = Remove-Item -Path C:\PowerShell\nincs.txt 2>&1
+$nincs
+#=============================================
+#---- Reguláris kifejezések ----
+#=============================================
+"PowerShell" -like "Power?hell"
+"PowerShell" -match "Power?hell"
+"PowerShell" -match "Power.?hell"
+"Power-shell" -match "Power[\s|-]shell"
+$matches
+"Power shell" -match "Power[\S|-]shell"
+$matches
+"Powershell" -match "Power[\S|-]shell"
+"Power-shell" -match "Power[\S|-]shell"
+"Power+shell" -match "Power[\S|-]shell"
+"jgipsz@domain.local" -match "\b\w+@\w+\.[a-z]{2,4}\b"
+"jgipsz@domain.loc" -match "\b\w+@\w+\.[a-z]{2,4}\b"
+"www.domain.local" -match "(?<fqdn>(?<local>(?<host>[a-z0-9]+)\.(?<domain>[a-z0-9]+))\.(?<tld>[a-z]{2,}))"
+$matches
+$matches.fqdn
+$matches.local
+$matches.host
+$matches.domain
+$matches.tld
+"PowerShell is (a) great (command-shell)!" -match "\([\w|-]*\)"
+$matches
+#=============================================
+#---- RegEx objektum ----
+#=============================================
+$pattern = [regex] "\([\w|-]*\)"
+$pattern.matches("PowerShell is (a) great (command-shell)!")
+$szoveg = $pattern.matches("PowerShell is (a) great (command-shell)!")
+$szoveg.value
+#=============================================
+#---- Select-String ----
+#=============================================
+"PowerShell is (a) great (command-shell)!" | Select-String -Pattern "\([\w|-]*\)"
+$szoveg = "PowerShell is (a) great (command-shell)!" | Select-String -Pattern "\([\w|-]*\)"
+$szoveg | Get-Member
+$szoveg.Matches
+$szoveg = "PowerShell is (a) great (command-shell)!" | Select-String -Pattern "\([\w|-]*\)" -AllMatches
+$szoveg.Matches
+$szoveg.Matches.Length
+$szoveg = Get-ChildItem -Path "$PSHOME\en-US\*.txt" | Select-String -Pattern '\(WMI\)'
+$szoveg

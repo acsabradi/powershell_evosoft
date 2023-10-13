@@ -1,0 +1,19 @@
+﻿#=============================================
+#---- Alapértelmezett paraméterek ----
+#=============================================
+. .\Functions2.ps1
+$functext = Get-Content -Path .\Functions2.ps1
+$PSDefaultParameterValues.Add("Get-CimInstance:ClassName","Win32_BIOS")
+$PSDefaultParameterValues
+Get-CimInstance
+Get-CimInstance -ClassName Win32_Process
+$PSDefaultParameterValues.Remove("Get-CimInstance:ClassName")
+$PSDefaultParameterValues
+$functext[190..221]
+$PSDefaultParameterValues.Add("Get-Area10:a",20)
+$PSDefaultParameterValues.Add("Get-Area10:b",10)
+$PSDefaultParameterValues.Add("Get-Area10:mode","Rectangle")
+$PSDefaultParameterValues
+Get-Area10
+$PSDefaultParameterValues = @{}
+$PSDefaultParameterValues

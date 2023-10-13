@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" ?> 
+<Configuration>
+  <ViewDefinitions> 
+    <View> 
+      <Name>Contact</Name> 
+	<ViewSelectedBy> 
+	  <TypeName>Contact</TypeName> 
+	</ViewSelectedBy> 
+	<GroupBy> 
+	  <PropertyName>ContactCompany</PropertyName> 
+	</GroupBy> 
+	<TableControl> 
+		<TableHeaders> 
+			<TableColumnHeader> 
+				<Width>30</Width> 
+			</TableColumnHeader> 
+			<TableColumnHeader> 
+				<Width>15</Width> 
+			</TableColumnHeader> 
+			<TableColumnHeader> 
+				<Width>15</Width> 
+			</TableColumnHeader> 
+		</TableHeaders> 
+		<TableRowEntries> 
+			<TableRowEntry>
+				<TableColumnItems> 
+					<TableColumnItem> 
+						<PropertyName>ContactName</PropertyName> 
+					</TableColumnItem> 
+					<TableColumnItem> 
+						<PropertyName>ContactCompany</PropertyName> 
+					</TableColumnItem> 
+					<TableColumnItem> 
+						<PropertyName>ContactPhone</PropertyName> 
+					</TableColumnItem> 
+				</TableColumnItems> 
+			</TableRowEntry> 
+		</TableRowEntries> 
+	</TableControl> 
+    </View> 
+  </ViewDefinitions> 
+</Configuration>

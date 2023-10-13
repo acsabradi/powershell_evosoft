@@ -1,0 +1,50 @@
+﻿<Products>
+  <Product ProductID="1">
+    <Name>Adjustable Race</Name>
+    <ProductNumber>AR-5381</ProductNumber>
+    <MakeFlag>0</MakeFlag>
+    <FinishedGoodsFlag>0</FinishedGoodsFlag>
+    <SafetyStockLevel>1000</SafetyStockLevel>
+    <ReorderPoint>750</ReorderPoint>
+    <StandardCost>44.95</StandardCost>
+    <ListPrice>52.3</ListPrice>
+    <DaysToManufacture>0</DaysToManufacture>
+    <SellStartDate>2002-06-01T00:00:00</SellStartDate>
+  </Product>
+  <Product ProductID="2">
+    <Name>Bearing Ball</Name>
+    <ProductNumber>BA-8327</ProductNumber>
+    <MakeFlag>0</MakeFlag>
+    <FinishedGoodsFlag>0</FinishedGoodsFlag>
+    <SafetyStockLevel>1000</SafetyStockLevel>
+    <ReorderPoint>750</ReorderPoint>
+    <StandardCost>12.5</StandardCost>
+    <ListPrice>18.75</ListPrice>
+    <DaysToManufacture>0</DaysToManufacture>
+    <SellStartDate>2002-06-01T00:00:00</SellStartDate>
+  </Product>
+  <Product ProductID="3">
+    <Name>BB Ball Bearing</Name>
+    <ProductNumber>BE-2349</ProductNumber>
+    <MakeFlag>0</MakeFlag>
+    <FinishedGoodsFlag>0</FinishedGoodsFlag>
+    <SafetyStockLevel>1000</SafetyStockLevel>
+    <ReorderPoint>750</ReorderPoint>
+    <StandardCost>12.5</StandardCost>
+    <ListPrice>18.75</ListPrice>
+    <DaysToManufacture>0</DaysToManufacture>
+    <SellStartDate>2002-06-01T00:00:00</SellStartDate>
+  </Product>
+  <Product ProductID="4">
+    <Name>Headset Ball Bearings</Name>
+    <ProductNumber>BE-2908</ProductNumber>
+    <MakeFlag>0</MakeFlag>
+    <FinishedGoodsFlag>0</FinishedGoodsFlag>
+    <SafetyStockLevel>1000</SafetyStockLevel>
+    <ReorderPoint>750</ReorderPoint>
+    <StandardCost>19.2</StandardCost>
+    <ListPrice>22.5</ListPrice>
+    <DaysToManufacture>0</DaysToManufacture>
+    <SellStartDate>2002-06-01T00:00:00</SellStartDate>
+  </Product>
+</Products>

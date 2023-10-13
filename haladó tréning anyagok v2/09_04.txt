@@ -1,0 +1,11 @@
+﻿#===============================================
+# ---- DSC Configuration Manager beállítása ---- 
+#===============================================
+. .\Dsc3.ps1 
+Get-Content -Path.\Dsc3.ps1
+RegConfiguration -OutputPath C:\Powershell\DSC -Ensure 'Present'
+Start-DscConfiguration -Path C:\Powershell\DSC -Wait -Verbose -Force
+Get-ChildItem HKLM:\Software
+Get-DscLocalConfigurationManager
+Set-DscLocalConfigurationManager -Path C:\Powershell\DSC  -Verbose
+Get-DscLocalConfigurationManager

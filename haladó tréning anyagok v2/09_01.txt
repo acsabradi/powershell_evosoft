@@ -1,0 +1,14 @@
+﻿#=============================================
+#---- Desired State Configuration ----
+#=============================================
+$PSVersionTable.PSVersion
+Get-Command -Module PSDesiredStateConfiguration 
+Get-DscResource 
+Find-Module xChrome
+Install-Module xChrome
+Get-DscResource
+Get-DscResource -Name File -Syntax
+Get-DscResource -Name Registry -Syntax
+Get-DscResource -Name MSFT_xChrome -Syntax
+Get-DscResource -name file, registry, MSFT_xChrome | Format-Table Name, ParentPath -AutoSize
+Get-Content -Path .\Dsc.txt

@@ -1,0 +1,13 @@
+﻿#============================
+# ---- DSC konfigurálása ----
+#============================
+. .\Dsc1.ps1 
+Get-Content -Path .\Dsc1.ps1 
+New-Item -Path C:\Powershell -Name DSC -Type Directory
+RegConfiguration -OutputPath C:\Powershell\DSC 
+Get-Content -Path C:\Powershell\DSC\localhost.mof
+Get-DscLocalConfigurationManager
+Start-DscConfiguration -Path C:\Powershell\DSC -Wait -Verbose -Force
+Get-ChildItem -Path HKLM:\Software
+Get-DscConfiguration
+Test-DscConfiguration -Detailed

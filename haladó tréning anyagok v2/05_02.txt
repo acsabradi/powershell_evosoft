@@ -1,0 +1,28 @@
+﻿#=============================================
+#---- Paramétertulajdonságok ----
+#=============================================
+. .\Functions2.ps1
+$functext = Get-Content -Path .\Functions2.ps1
+$functext[21..35]
+Get-Area3 2 -3
+Get-Area3 0 3
+$test = 1
+$variable = Get-Variable -Name test
+$variable | Get-Member
+$variable.Attributes
+Start-Process("https://docs.microsoft.com/en-us/dotnet/api/system.management.automation.validaterangeattribute?view=powershellsdk-7.0.0")
+$validateRange = New-Object -TypeName System.Management.Automation.ValidateRangeAttribute(1,100)
+$variable.Attributes.Add($validateRange)
+$test = 1
+$test = 10
+$test = 100
+$test = 1000 
+$functext[36..48]
+Get-Area4
+Get-Area4 2 3
+Get-Area4 2 300
+Get-Area4 0 3
+Get-Area4 2 -3
+$functext[49..73]
+Get-Area5
+Get-Area5 2 3

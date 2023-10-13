@@ -1,0 +1,43 @@
+﻿#=============================================
+#---- Elágazás ----
+#=============================================
+Get-Content -Path .\00_03_if.ps1
+.\00_03_if.ps1
+#=============================================
+#---- Többirányú elágazás ----
+#=============================================
+Get-Content -Path .\00_03_switch.ps1
+.\00_03_switch.ps1
+#=============================================
+#---- Ciklus ----
+#=============================================
+# While
+Get-Content -Path .\00_03_while.ps1
+.\00_03_while.ps1
+# Do..While
+Get-Content -Path .\00_03_dowhile.ps1
+.\00_03_dowhile.ps1
+# Do..Until
+Get-Content -Path .\00_03_dountil.ps1
+.\00_03_dountil.ps1
+# For
+Get-Content -Path .\00_03_for.ps1
+.\00_03_for.ps1
+#=============================================
+#---- ForEach ----
+#=============================================
+$tomb = Get-ChildItem -Path C:\Windows
+$tomb.GetType()
+$tomb[0].GetType()
+$for=foreach ($elem in $tomb){$elem.GetType()}
+$for
+$for=foreach ($elem in $tomb){$elem.Name}
+$for
+# ForEach-Object
+$tomb | ForEach-Object {"{0,20} - {1,-20}" -f $_.Name,$_.GetType()}
+$tomb | Where-Object {$_ -is [System.IO.FileInfo]} | ForEach-Object {"{0,-20} - {1,-20}" -f $_.Name,$_.Length}
+#=============================================
+#---- Break/Continue ----
+#=============================================
+Get-Content -Path .\00_03_break.ps1
+.\00_03_break.ps1

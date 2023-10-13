@@ -1,0 +1,13 @@
+﻿#=============================================
+#---- Szkriptmodul készítése ----
+#=============================================
+$PSHome
+$Env:PSModulePath
+Get-Content -Path .\ShareModule\ShareModule.psm1
+Get-Childitem Function:
+Import-Module .\ShareModule
+Get-Childitem Function:
+gs localhost
+gss localhost
+Get-Module ShareModule
+Remove-Module ShareModule

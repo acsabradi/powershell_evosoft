@@ -1,0 +1,20 @@
+﻿#=============================================
+#---- Splatting/Switching----
+#=============================================
+. .\Functions2.ps1
+$functext = Get-Content -Path .\Functions2.ps1
+$functext[0..7]
+Get-Area1 2 3
+Get-Area1 $b=2 $a=3
+Get-Area1 -b 2 -a 3
+Get-Area1 -b 2 3
+Get-Area1(3,4)
+$oldalak = (3,4)
+$oldalak
+Get-Area1 @oldalak
+$oldalak = @{b=3;a=4}
+$oldalak
+Get-Area1 @oldalak
+$functext[8..20]
+Get-Area2 2 3
+Get-Area2 2 3 -terulet

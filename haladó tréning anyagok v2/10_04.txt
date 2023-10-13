@@ -1,0 +1,49 @@
+﻿#=============================================
+#---- SQL PowerShell Provider ----							
+#=============================================
+Import-Module SQLPS
+Get-PSDrive
+Set-Location -Path SQLSERVER:\SQL\localhost\SQLEXPRESS\Databases
+Get-ChildItem
+Set-Location AdventureWorks2019
+Get-ChildItem
+Set-Location Tables
+Get-ChildItem
+Set-Location -Path SQLSERVER:\SQL\localhost\SQLEXPRESS
+Get-Help Invoke-Sqlcmd -ShowWindow
+Invoke-Sqlcmd -Query "SELECT GETDATE() AS TimeOfQuery;" 
+Invoke-Sqlcmd -Query "CREATE DATABASE Iskola"
+Set-Location -Path Databases
+Get-ChildItem
+Set-Location  Iskola\Tables
+Invoke-Sqlcmd -Query "CREATE TABLE tanar (tan_az integer,nev varchar(20),cim varchar(20))"
+Invoke-Sqlcmd -Query "CREATE TABLE tantargy(tant_az integer,megnevezes varchar(20));"
+Invoke-Sqlcmd -Query "CREATE TABLE szak (tan_az integer,tant_az integer);"
+Get-ChildItem
+Invoke-Sqlcmd -Query "INSERT INTO tanar (tan_az, nev, cim) VALUES (1, 'Géza', 'Bp');"
+Invoke-Sqlcmd -Query "INSERT INTO tanar (tan_az, nev, cim) VALUES (2, 'Béla', 'Bp');"
+Invoke-Sqlcmd -Query "INSERT INTO tanar (tan_az, nev, cim) VALUES (3, 'Károly', 'Szeged');"
+Invoke-Sqlcmd -Query "INSERT INTO tantargy(tant_az, megnevezes) VALUES (1, 'Matek');"
+Invoke-Sqlcmd -Query "INSERT INTO tantargy(tant_az, megnevezes) VALUES (2, 'Fizika');"
+Invoke-Sqlcmd -Query "INSERT INTO tantargy(tant_az, megnevezes) VALUES (3, 'Kémia');"
+Invoke-Sqlcmd -Query "INSERT INTO szak (tan_az, tant_az) VALUES (1,1)"
+Invoke-Sqlcmd -Query "INSERT INTO szak (tan_az, tant_az) VALUES (1,2)"
+Invoke-Sqlcmd -Query "INSERT INTO szak (tan_az, tant_az) VALUES (2,2)"
+Invoke-Sqlcmd -Query "INSERT INTO szak (tan_az, tant_az) VALUES (2,3)"
+Invoke-Sqlcmd -Query "INSERT INTO szak (tan_az, tant_az) VALUES (3,3)"
+Invoke-Sqlcmd -Query "INSERT INTO szak (tan_az, tant_az) VALUES (3,1)"
+Invoke-Sqlcmd -Query "SELECT * FROM tanar;"
+Invoke-Sqlcmd -Query "SELECT * FROM tanar WHERE cim LIKE 'B%';"
+Invoke-Sqlcmd -Query "SELECT nev, megnevezes FROM tanar JOIN szak ON tanar.tan_az=szak.tan_az JOIN tantargy ON tantargy.tant_az=szak.tant_az;"
+Invoke-Sqlcmd -Query "UPDATE tanar SET cim='Debrecen' WHERE nev LIKE 'Béla';"
+Invoke-Sqlcmd -Query "SELECT * FROM tanar;"
+$tanarok = Invoke-Sqlcmd -Query "SELECT * FROM tanar;"
+$tanarok | Get-Member
+$tanarok[0]
+$tanarok[0].nev
+Invoke-Sqlcmd -Query "DROP TABLE tanar;"
+Set-Location -Path SQLSERVER:\SQL\localhost\SQLEXPRESS
+Invoke-Sqlcmd -Query "sp_who;" | Where-Object {$_.dbname -eq "Iskola"}
+$who = Invoke-Sqlcmd -Query "sp_who;" | Where-Object {$_.dbname -eq "Iskola"}
+$who | ForEach-Object {$string = "kill " + $_.spid + ";"; $string; Invoke-Sqlcmd -Query $string;}
+Invoke-Sqlcmd -Query "DROP DATABASE Iskola;"

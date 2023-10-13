@@ -1,0 +1,21 @@
+﻿#=============================================
+#---- Hibakezelés a TRAP használatával ----
+#=============================================
+Get-Content -Path .\Trap.ps1
+.\Trap.ps1
+# Kommentek eltávolítása.
+.\Trap.ps1
+.\Trap.ps1
+# Trapparaméter beállítása.
+.\Trap.ps1
+#=============================================
+#---- Hibakezelés a TRY használatával ----
+#=============================================
+Get-Content -Path .\Try.ps1
+.\Try.ps1
+# Komment eltávolítása a hibás parancs elől.
+.\Try.ps1
+# Komment eltávolítása a nullával való osztás elől.
+.\Try.ps1
+# Throw beállítása.
+.\Try.ps1

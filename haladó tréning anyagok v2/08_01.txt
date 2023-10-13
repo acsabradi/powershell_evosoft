@@ -1,0 +1,10 @@
+﻿#=============================================
+#---- Munkafolyamatok készítése ----
+#=============================================
+# Szkript tartalmának felolvasása.
+Get-Content -Path .\WorkFlow1.ps1
+.\WorkFlow1.ps1
+Get-Content .\WorkFlow2.ps1
+.\WorkFlow2.ps1
+Get-Content .\WorkFlow3.ps1
+.\WorkFlow3.ps1

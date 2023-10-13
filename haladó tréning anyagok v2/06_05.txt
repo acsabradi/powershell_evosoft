@@ -1,0 +1,58 @@
+#=============================================
+#---- Modulok használata ----
+#=============================================
+Get-PSSnapin
+Get-PSSnapin -Registered
+Get-Module
+Get-Module -ListAvailable
+Get-Command -Module NetTCPIP
+Import-Module -Name NetTCPIP
+Get-Module
+Get-NetIpAddress
+NetTCPIP\Get-NetIpAddress
+Import-Module NetTCPIP -Force -Prefix x -PassThru
+Get-xNetIpAddress
+Remove-Module NetTCPIP
+Get-Module
+#=============================================
+#---- Csomagkezeles ----
+#=============================================
+[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+Get-Command -Noun Module | Format-Table -AutoSize
+Import-Module –Name PackageManagement
+Get-Command –Module PackageManagement
+Import-Module –Name PowerShellGet
+Get-Command –Module PowerShellGet
+Find-PackageProvider | Select-Object -First 10
+Get-PackageProvider
+Get-PackageSource
+Get-Package
+Find-Package | Select-Object -First 10
+Find-Module | Select-Object -First 10
+Find-Package *Excel* | Out-GridView
+Find-Package -Name PsExcel | Install-Package
+Get-Package -Name PsExcel | Format-List
+Get-InstalledModule
+Get-PSRepository
+Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
+Get-PSRepository
+Find-Command -Repository PSGallery | Select-Object -First 10
+Find-Command -Repository PSGallery -Name Set-NTFSOwner
+Find-Command -Repository PSGallery -ModuleName NTFSSecurity
+Find-Script | Select-Object -First 10
+Find-Script -Repository PSGallery -Name MineSweeper
+Install-Script -Name Minesweeper -Scope CurrentUser
+Get-InstalledScript
+minesweeper.ps1
+Save-Script minesweeper -Path C:\PowerShell
+Get-Content C:\PowerShell\minesweeper.ps1
+#=============================================
+#---- Kozossegi modulok ----
+#=============================================
+Find-Module -Filter Excel
+Find-Module -Filter Access
+Install-Module -Name PSExcel
+Import-Module PSExcel
+Get-Module PSExcel
+Get-Module PSExcel | Format-List *
+Get-Command -Module PSExcel

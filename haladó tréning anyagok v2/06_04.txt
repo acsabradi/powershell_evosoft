@@ -1,0 +1,10 @@
+﻿#=============================================
+#---- About súgó modulhoz ----
+#=============================================
+$path=$env:UserProfile+"\Documents\WindowsPowerShell\Modules"
+New-Item -Path $path\ShareModule -Name EN-us -Type Directory
+New-Item -Path $path\ShareModule -Name HU-hu -Type Directory
+Get-Content .\ShareModule\about_ShareModule.help.txt
+Get-Item -Path .\ShareModule\about_ShareModule.help.txt | Copy-Item -Destination $path\ShareModule\EN-us
+Get-Item -Path .\ShareModule\about_ShareModule.help.txt | Copy-Item -Destination $path\ShareModule\HU-hu 
+Get-Help about_ShareModule

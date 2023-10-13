@@ -1,0 +1,26 @@
+﻿#=============================================
+#---- Függvénytár készítése ----
+#=============================================
+. .\Library.ps1
+$lib = Get-Content -Path .\Library.ps1
+$lib[12..59]
+$lib[0..10]
+$lib[61..117]
+$lib[119..120]
+Get-Childitem -Path Function:
+Get-Shares localhost
+New-SmbShare -Path C:\PowerShell -Name Demo
+Get-Shares localhost
+Get-ShareSizes localhost
+"TrainingServer","valami","localhost" | Get-Shares
+"TrainingServer","valami","localhost" | Get-ShareSizes
+Get-Content -Path .\servers.txt 
+Get-Content -Path .\servers.txt | Get-Shares
+Get-Content -Path .\servers.txt | Get-ShareSizes
+gs localhost
+gss localhost
+Get-Help Get-Shares -full
+Get-Help Get-Shares -ShowWindow
+Get-Help Get-ShareSizes -full
+Get-Help Get-ShareSizes -Showwindow
+Get-ShareSize C:\Powershell

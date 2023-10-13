@@ -1,0 +1,14 @@
+﻿#============================================================
+#---- Szkriptmodul készítése Manifest fájl használatával ----
+#============================================================
+$path=$env:UserProfile+"\Documents\WindowsPowerShell\Modules"
+Copy-Item -Path .\ShareModule -Destination $path\ShareModule -Recurse
+New-ModuleManifest -Path $path\ShareModule\ShareModule.psd1 -ModuleVersion 1.0.0.0 -Description "Megosztások lekérdezése" -FunctionsToExport Get-Shares,Get-ShareSizes -RootModule $path\ShareModule\ShareModule.psm1
+Get-Content $path\ShareModule\ShareModule.psd1
+Import-Module ShareModule
+Get-Module ShareModule
+gs localhost
+gss localhost
+Get-Alias gs*
+Remove-Module ShareModule
+Get-Alias gs*

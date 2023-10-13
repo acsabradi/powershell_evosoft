@@ -1,0 +1,80 @@
+﻿#=============================================
+#---- HTML jelentés készítése ----
+#=============================================
+Get-Process | Select -First 5
+Get-Process | Select -First 5 | ConvertTo-Html | Set-Content -Path "C:\PowerShell\HtmlReport.html"
+Invoke-Item -Path C:\PowerShell\HtmlReport.html
+Get-Content -Path .\Html.css
+Get-Process | Select -First 5 | ConvertTo-Html -CSSUri "C:\PowerShell\DemoCode\Html.css" | Set-Content -Path "C:\PowerShell\HtmlReport.html"
+Invoke-Item C:\PowerShell\HtmlReport.html
+Get-Content -Path .\SaveHTML.ps1
+.\SaveHTML.ps1
+# Export-HTMLReport modul másolása
+Import-Module -Name Export-HtmlReport
+Get-Content -Path .\HTMLInputObject.ps1
+. .\HTMLInputObject.ps1
+$OutputFileName = "C:\PowerShell\Example.html"
+$ReportTitle    = "Example"
+Export-HtmlReport -InputObject $HTMLInputObject -ReportTitle $ReportTitle -OutputFile $OutputFileName
+Invoke-Item C:\PowerShell\Example.html
+#=============================================
+#---- XML kezelése ----
+#=============================================
+# XML lekérdezése
+Get-Content -Path .\Products1.xml
+[xml] $products = Get-Content -Path .\Products1.xml
+$products.GetType().Fullname
+$products | Get-Member
+$products.Products
+$products.Products.Product
+($products.Products.Product).Count
+$products.Products.Product | Format-Table -AutoSize
+$products.Products.Product.ListPrice
+$products.Products.Product.ListPrice | Get-Member
+$products.Products.Product.ListPrice | % {[double] $_} | ? {$_ -ge 1000}
+$products.Products.Product | ? {[double] $_.ListPrice -ge 1000}
+($products.Products.Product | ? {[double] $_.ListPrice -ge 1000}).Count
+Get-Content -Path .\Products2.xml
+[xml] $products = Get-Content -Path .\Products2.xml
+$products.SelectNodes("//Name")
+$products.SelectSingleNode("//Product[2]")
+$products  | Select-Xml "//StandardCost" | % { $_.Node.InnerText } | Select-Object -Unique
+$products 
+$products.Products
+$products.Products.Product
+$products.Products.Product | Format-Table -AutoSize
+$products.Products.Product[0]
+$products.Products.Product[0].Name
+$products.SelectSingleNode("//Product[contains(Name,'Adjustable Race')]/self::Product/StandardCost")
+$products.SelectSingleNode("//Product[contains(Name,'Adjustable Race')]/following-sibling::Product/StandardCost")
+$products.SelectNodes("//Product[StandardCost > 40]")
+# XML tag hozzáadása
+$product = $products.Products.Product[0].Clone()
+$product.SetAttribute("ProductID","5")
+$product.Name = "HL Mountain Pedal"
+$product.ProductNumber = "PD-M562"
+$product.MakeFlag = "0"
+$product.FinishedGoodsFlag = "0"
+$product.SafetyStockLevel = "1000"
+$product.ReorderPoint = "500"
+$product.StandardCost = "27.5680"
+$product.ListPrice = "62.0900"
+$product.DaysToManufacture = "1"
+$product.SellStartDate = "2002-06-01T00:00:00"
+$products.Products.AppendChild($product)
+$products.Save("C:\PowerShell\Democode\Products2.xml")
+$products.Products.Product | Format-Table -AutoSize
+#=============================================
+#---- JSON kezelése ----
+#=============================================
+# --- Kiiras JSON formatumba
+Start-Process notepad
+Get-Process notepad | ConvertTo-Json
+Get-Process notepad | ConvertTo-Json  | Out-File -FilePath C:\PowerShell\notepad.json
+Get-Process notepad | Stop-Process
+Get-Content -Path C:\PowerShell\notepad.json
+Get-Content -Path C:\PowerShell\notepad.json | ConvertFrom-Json
+# ---- Beolvasas JSON formatumol
+$request = 'http://musicbrainz.org/ws/2/artist/0c2d1de8-fc3a-4ca9-a90b-eea69a5968a5?inc=aliases&fmt=json'
+Invoke-WebRequest $request -UseBasicParsing | ConvertFrom-Json
+Invoke-WebRequest $request -UseBasicParsing | ConvertFrom-Json | Select-Object -Property Name, Disambiguation, Country

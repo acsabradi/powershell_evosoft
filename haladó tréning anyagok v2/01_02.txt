@@ -1,0 +1,59 @@
+﻿#=============================================
+#---- Objektum típusok ----
+#=============================================
+# .NET Objektum
+Get-Item C:\PowerShell
+Get-Item C:\PowerShell | Get-Member
+Get-Item C:\PowerShell | Format-List *
+# WMI objektum
+Get-WmiObject Win32_Directory -Filter "Name='C:\\Powershell'" | Get-Member
+Get-WmiObject Win32_Directory -Filter "Name='C:\\Powershell'" | Format-List *
+# COM objektum
+$Filesystem = New-Object -ComObject "Scripting.FilesystemObject"
+$Filesystem.GetFolder("C:\PowerShell")
+$Filesystem.GetFolder("C:\PowerShell") | Get-Member
+$Filesystem.GetFolder("C:\PowerShell") | Format-List *
+#=============================================
+#---- Saját PS Objektum ----
+#=============================================
+$object = New-Object –TypeName PSObject
+$object | Add-Member –MemberType NoteProperty –Name Name –Value (Get-Item C:\PowerShell).FullName
+$object | Add-Member –MemberType NoteProperty –Name Mode –Value (Get-Item C:\PowerShell).Mode
+$object | Add-Member –MemberType NoteProperty –Name Compressed –Value  (Get-WmiObject Win32_Directory -Filter "Name='C:\\Powershell'").Compressed
+$object | Add-Member –MemberType NoteProperty –Name Encrypted –Value  (Get-WmiObject Win32_Directory -Filter "Name='C:\\Powershell'").Encrypted
+$object | Add-Member –MemberType NoteProperty –Name Size –Value($Filesystem.GetFolder("C:\PowerShell")).Size
+Write-Output $object
+$object | Get-Member
+# Új objektum egyszerűbben.
+$contact = @{Name = "user"; Company = "ceg"; Phone = "123-4567"} 
+$user = New-Object -TypeName PSObject -Property $contact
+$user
+$user.GetType()
+$user | Get-Member
+$user.Name = "Mézga Géza"
+$user.Company  = "Köbüki Kft."
+$user.Phone = "1234-567"
+$user
+#=============================================
+#---- Objektumtípusok lekérdezése ----
+#=============================================
+# .NET osztalyok
+[AppDomain]::CurrentDomain.GetAssemblies() | Foreach-Object { $_.GetTypes()}
+# WMI osztalyok
+Get-WmiObject -NameSpace "root/CIMV2" -list
+# COM osztalyok
+Get-ChildItem HKLM:\Software\Classes | ?{$_.PSChildName -match '^\w+\.\w+$' -and (Test-Path -Path "$($_.PSPath)\CLSID")} | Select-Object -ExpandProperty PSChildName
+#=============================================
+#---- Update-List ----
+#=============================================
+$object = New-Object PSObject
+$object | Add-Member -Name Nev -Value "Objektum1" -MemberType noteproperty
+$properties = New-Object system.collections.arraylist
+$properties.add("one")
+$properties.add("two")
+$object | Add-Member -Name Tulajdonsagok -Value $properties -MemberType noteproperty
+$object
+$object | Update-List -Property Tulajdonsagok -Add "three", "four"
+$object | Update-List -Property Tulajdonsagok -Remove "two"
+$object | Update-List -Property Tulajdonsagok -Replace "five", "six"
+$object | Select-Object -ExpandProperty Tulajdonsagok		

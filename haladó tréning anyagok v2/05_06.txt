@@ -1,0 +1,47 @@
+﻿#=============================================
+#---- Pipeline input ----
+#=============================================
+Get-Content -Path .\Get-OptimalSize1.ps1
+.\Get-OptimalSize1.ps1 -sizeInBytes 1024
+1048576 | .\Get-OptimalSize1.ps1
+Get-Content -Path .\Get-OptimalSize2.ps1
+.\Get-OptimalSize2.ps1 -sizeInBytes 1024
+1048576 | .\Get-OptimalSize2.ps1
+1048576,1024 | .\Get-OptimalSize2.ps1
+Get-Content -Path .\Get-OptimalSize3.ps1
+.\Get-OptimalSize3.ps1 -sizeInBytes 1024
+1048576 | .\Get-OptimalSize3.ps1
+1048576,1024 | .\Get-OptimalSize3.ps1
+#=============================================
+#---- Fejlett függvény ----
+#=============================================
+. .\Get-OptimalSize4.ps1
+$f = Get-Content -Path .\Get-OptimalSize4.ps1
+$f[0..19]
+Get-OptimalSize1 -sizeInBytes 1024
+1048576 | Get-OptimalSize1
+1048576,1024 | Get-OptimalSize1
+$f[21..69]
+Get-OptimalSize2 -sizeInBytes 1024
+1048576 | Get-OptimalSize2
+1048576,1024 | Get-OptimalSize2
+Get-Help Get-OptimalSize2
+Get-Help Get-OptimalSize2 -Detailed
+Get-Help Get-OptimalSize2 -Full
+Get-Help Get-OptimalSize2 -Examples
+Get-OptimalSize2 -sizeInBytes 1024 -WhatIf
+Get-OptimalSize2 -sizeInBytes 1048576 -Confirm
+1024 | Get-OptimalSize2 -WhatIf
+1048576 | Get-OptimalSize2 -Confirm
+#=============================================
+#---- Dinamikus paraméterek ----
+#=============================================
+(Get-Command Get-Content).parameters
+$dyn_params = (Get-Command Get-Content).parameters
+$dyn_params.Keys | Where-Object {$dyn_params[$_].IsDynamic} | ForEach-Object {$dyn_params[$_].name}
+$dyn_params = (Get-Command Get-Content -ArgumentList HKLM:).parameters
+$dyn_params.Keys | where-object {$dyn_params[$_].IsDynamic} | ForEach-Object {$dyn_params[$_].name}
+Get-Content -Path .\DynamicParam.ps1
+. .\DynamicParam.ps1
+DynamicParamFunction 4
+DynamicParamFunction 6

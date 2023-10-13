@@ -1,0 +1,17 @@
+﻿#=============================================
+#---- A CmdletBinding ----
+#=============================================
+. .\Functions3.ps1
+$functext = Get-Content -Path .\Functions3.ps1
+$functext[0..19]
+CmdletBindingDemo1 -namespace root/cimv2 | Select-Object -First 10
+CmdletBindingDemo1 -dir C:\Windows | Select-Object -First 10
+CmdletBindingDemo1 -dir C:\Windows root/cimv2
+CmdletBindingDemo1 C:\Windows
+$functext[20..39]
+CmdletBindingDemo2 C:\Windows | Select-Object -First 10
+$functext[40..65]
+Get-Help CmdletBindingDemo1
+Get-Help CmdletBindingDemo3
+CmdletBindingDemo3 -namespace root/cimv2 -WhatIf
+CmdletBindingDemo3 -dir C:\Windows -Confirm

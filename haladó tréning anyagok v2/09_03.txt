@@ -1,0 +1,10 @@
+﻿#====================================
+# ---- Konfiguráció visszavonása ---- 
+#====================================
+. .\Dsc2.ps1 
+Get-Content -Path .\Dsc2.ps1
+RegConfiguration -OutputPath C:\Powershell\DSC
+Start-DscConfiguration -Path C:\Powershell\DSC -Wait -Verbose -Force
+Get-DscConfiguration
+Get-DscConfigurationStatus 
+Get-ChildItem -Path HKLM:\Software
